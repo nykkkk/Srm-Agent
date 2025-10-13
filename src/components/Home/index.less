@@ -1,0 +1,68 @@
+@keyframes animate {
+  0% {
+    transform: rotate(310deg) translateX(0);
+    opacity: 1;
+  }
+
+  90% {
+    opacity: 1;
+  }
+
+  100% {
+    transform: rotate(310deg) translateX(-1000px);
+    opacity: 0;
+  }
+}
+
+.app-home {
+  position: relative;
+
+  &-bg,
+  &-main {
+    position: absolute;
+  }
+
+  &-bg {
+    width: 181px;
+    height: 181px;
+    top: 70px;
+    left: 20px;
+    background-repeat: no-repeat;
+    background-size: contain;
+    background-image: url('./img/bg.png');
+  }
+
+  &-main {
+    margin-top: 90px;
+    margin-left: 22px;
+  }
+
+  .img {
+    width: 48px;
+    height: 48px;
+    margin-bottom: 15px;
+    background-repeat: no-repeat;
+    background-size: cover;
+  }
+
+  .title {
+    font-size: 48px;
+    color: #252424;
+    font-weight: 700;
+  }
+
+  .subtitle {
+    font-size: 16px;
+    color: #3d4774;
+    letter-spacing: 1.3px;
+    margin-top: -4px;
+    font-weight: 400;
+    display: flex;
+    align-items: center;
+
+    i {
+      font-size: 23px;
+      margin-top: 3px;
+    }
+  }
+}

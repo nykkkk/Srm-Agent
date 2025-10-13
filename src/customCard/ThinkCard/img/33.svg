@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg width="51px" height="50px" viewBox="0 0 51 50" version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
+    <title>编组 31</title>
+    <defs>
+        <linearGradient x1="12.0262062%" y1="37.4140009%" x2="101.54978%" y2="66.3743457%" id="linearGradient-1">
+            <stop stop-color="#8727FC" stop-opacity="0" offset="0%"></stop>
+            <stop stop-color="#2739FC" offset="100%"></stop>
+        </linearGradient>
+    </defs>
+    <g id="L3、L4层级-UI" stroke="none" stroke-width="1" fill="none" fill-rule="evenodd">
+        <g id="编组-31">
+            <rect id="矩形" x="0" y="0" width="50" height="50"></rect>
+            <path d="M27.2175594,11.5207205 C30.6902112,10.8299672 34.2897108,11.1844869 37.5608772,12.5394482 C40.8320436,13.8944096 43.6279572,16.1889563 45.5950564,19.1329279 C47.5621555,22.0768993 48.6120903,25.5380709 48.6120903,29.0787558 L45.6120903,29.0787558 C45.6120903,26.1314149 44.7381024,23.2502627 43.1006476,20.7996388 C41.4631927,18.3490146 39.1358151,16.4389854 36.412827,15.3110869 C33.6898389,14.1831884 30.6935392,13.8880787 27.8028303,14.4630764 C24.9121212,15.0380741 22.2568353,16.4573538 20.1727505,18.5414384 L18.0514302,16.4201179 C20.5550726,13.9164758 23.7449074,12.2114739 27.2175594,11.5207205 Z" id="Ellipse-87备份-2" fill="url(#linearGradient-1)" fill-rule="nonzero" transform="translate(33.3318, 20.1277) rotate(45) translate(-33.3318, -20.1277)"></path>
+        </g>
+    </g>
+</svg>

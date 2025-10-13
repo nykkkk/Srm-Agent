@@ -1,0 +1,15 @@
+{
+  "extends": "./src/.umi/tsconfig.json",
+  "compilerOptions": {
+    "paths": {
+      "@/*": ["src/*"],
+      "@@/*": ["src/.umi/*"],
+      "umi": ["node_modules/umi"],
+      "umi/typings": ["src/.umi/typings"],
+      "kdesign-mobile": ["node_modules/kdesign-mobile/es"],
+      "@kdcloudjs/kdesign-chatui": ["node_modules/@kdcloudjs/kdesign-chatui/es"]
+    },
+    "types": ["resize-observer-browser"],
+    "noImplicitAny": false
+  }
+}

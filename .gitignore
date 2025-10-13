@@ -1,0 +1,30 @@
+# dependencies
+node_modules
+/node_modules
+/npm-debug.log*
+/yarn-error.log
+/yarn.lock
+/package-lock.json
+/pnpm-lock.yaml
+
+# production
+/dist
+/pro
+
+# misc
+.DS_Store
+.idea
+
+# umi
+/.env.local
+/.umirc.local.ts
+/config/config.local.ts
+/src/.umi
+/src/.umi-production
+/src/.umi-test
+/dist
+.swc
+
+*.zip
+*.rar
+*.7z

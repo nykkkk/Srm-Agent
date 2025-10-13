@@ -1,0 +1,331 @@
+// 采购智能风控智能体首页样式 - 根据Figma设计稿精确还原
+
+// 基础样式重置
+body,
+html {
+  font-family:
+    'PingFangSC-Regular', 'Roboto', 'San Francisco', 'Helvetica Neue', Helvetica, Arial, 'PingFang SC',
+    'Hiragina Sans GB', 'WenQuanYi Micro Hei', 'microsoft yahei ui', 'microsoft yahei', sans-serif;
+  margin: 0;
+  padding: 0;
+}
+
+// 主容器样式
+.home-container {
+  min-height: 100vh;
+  // width: 100%;
+}
+
+// 顶部导航样式
+.top-navigation {
+  position: sticky;
+  top: 0px;
+  z-index: 10;
+}
+
+.navigation-content {
+  display: flex;
+  align-items: center;
+  padding-left: 1rem;
+  padding-right: 1rem;
+  height: 3rem;
+}
+
+.navigation-title {
+  width: 100%;
+  line-height: 80px;
+  height: 100%;
+  color: #000000;
+  text-align: center;
+  font-family: PingFang SC;
+  font-weight: 600;
+  font-style: Semibold;
+  font-size: 18px;
+  letter-spacing: 0%;
+  text-align: center;
+}
+
+// 主内容区样式
+.main-content {
+  padding-left: 20px;
+  padding-right: 20px;
+}
+
+// 欢迎语区域
+.welcome-section {
+  margin-top: 100px;
+  position: relative;
+  /* 添加右上方背景图片容器 */
+}
+
+.greeting-primary {
+  font-size: 32px;
+  background-image: linear-gradient(90deg, #0088fe 0%, #2a5eec 31.91%, #6028da 100%);
+  background-clip: text;
+  -webkit-background-clip: text; /* 兼容webkit浏览器 */
+  -webkit-text-fill-color: transparent; /* 兼容webkit浏览器 */
+  color: transparent; /* 作为后备方案 */
+
+  margin-bottom: 0.25rem;
+
+  font-family: PingFang SC;
+  font-weight: 600;
+  font-style: Semibold;
+  line-height: 48px;
+  letter-spacing: 0px;
+}
+
+.greeting-secondary {
+  font-size: 32px;
+  font-weight: 700;
+  background-image: linear-gradient(90deg, #0088fe 0%, #2a5eec 31.91%, #6028da 100%);
+  background-clip: text;
+  -webkit-background-clip: text; /* 兼容webkit浏览器 */
+  -webkit-text-fill-color: transparent; /* 兼容webkit浏览器 */
+  color: transparent;
+  margin-bottom: 0.75rem;
+}
+
+.greeting-description {
+  color: #334155;
+  margin-bottom: 2rem;
+
+  font-family: PingFang SC;
+  font-weight: 500;
+  font-style: Medium;
+  font-size: 16px;
+  line-height: 24px;
+  letter-spacing: 0px;
+}
+
+/* 右上方背景图片样式 */
+.top-right-background {
+  position: absolute;
+  top: 0;
+  right: 0;
+  width: 300px; /* 调整大小以适应设计 */
+  height: 300px;
+  background-image: url('@/assets/bgLogo.png');
+  background-size: contain;
+  background-repeat: no-repeat;
+  background-position: top right;
+  opacity: 0.5; /* 调整透明度 */
+  pointer-events: none; /* 确保不影响交互 */
+  z-index: -1; /* 确保在内容下方 */
+}
+
+// 搜索框样式
+.search-container {
+  margin-top: 30px;
+  width: 338px;
+  margin-bottom: 1rem;
+  position: relative;
+  display: inline-block;
+  background: linear-gradient(350deg, rgba(2, 91, 255, 0.6) 7.6%, rgba(0, 175, 239, 0.12) 27.6%);
+  padding: 6px;
+  border-radius: 12px;
+  transition: all 0.3s ease;
+}
+
+.search-input {
+  width: 100%;
+  height: 42px;
+  padding: 10px 20px;
+  background-color: #ffffff;
+  border: none;
+  border-radius: 10px;
+  font-weight: 400;
+  font-size: 16px;
+  font-family: PingFang SC;
+  outline: none;
+  box-sizing: border-box;
+}
+
+.search-input:focus {
+  outline: 2px solid transparent;
+  outline-offset: 2px;
+  --tw-ring-offset-shadow: var(--tw-ring-inset) 0 0 0 var(--tw-ring-offset-width) var(--tw-ring-offset-color);
+  --tw-ring-shadow: var(--tw-ring-inset) 0 0 0 calc(2px + var(--tw-ring-offset-width)) var(--tw-ring-color);
+  box-shadow: var(--tw-ring-offset-shadow), var(--tw-ring-shadow), var(--tw-shadow, 0 0 #0000);
+  --tw-ring-color: #91ccff;
+}
+
+// 开始分析按钮样式
+.analysis-button {
+  margin-top: 20px;
+  width: 100%;
+  background: linear-gradient(90deg, #27caff 0%, #367cff 50.5%, #2eb9ff 100%);
+  color: #ffffff;
+  font-weight: 500;
+  padding-top: 0.75rem;
+  padding-bottom: 0.75rem;
+  border-radius: 9999px;
+  margin-bottom: 2rem;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  box-shadow: 0px 0px 8px 0px rgba(255, 255, 255, 0.59) inset;
+  border: none;
+  cursor: pointer;
+  transition: all 0.3s ease;
+}
+
+.button-icon {
+  margin-right: 0.5rem;
+}
+
+.button-text {
+  font-family: PingFang SC;
+  font-weight: 400;
+  font-style: Regular;
+  font-size: 16px;
+  line-height: 24px;
+  letter-spacing: 0px;
+  text-align: center;
+  color: rgba(255, 255, 255, 1);
+}
+
+// 最近分析样式
+.recent-analysis {
+  margin-bottom: 4rem;
+}
+
+.section-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 1rem;
+}
+
+.section-title {
+  color: rgba(33, 33, 33, 1);
+  font-family: PingFang SC;
+  font-weight: 600;
+  font-style: Semibold;
+  font-size: 16px;
+  line-height: 26px;
+  letter-spacing: 0px;
+  vertical-align: middle;
+}
+
+.view-more {
+  color: rgba(39, 111, 245, 1);
+
+  font-family: PingFang SC;
+  font-weight: 400;
+  font-style: Regular;
+  font-size: 12px;
+  line-height: 20px;
+  letter-spacing: 0px;
+  vertical-align: middle;
+}
+
+.analysis-list {
+  display: flex;
+  flex-direction: column;
+  gap: 0.75rem;
+}
+.analysis-card {
+  background-color: #ffffff;
+  padding: 1rem;
+  border-radius: 0.75rem;
+  border-width: 1px;
+  border-color: #f1f1f1;
+  --tw-shadow: 0 1px 2px 0 rgba(0, 0, 0, 0.05);
+  box-shadow: var(--tw-ring-offset-shadow, 0 0 #0000), var(--tw-ring-shadow, 0 0 #0000), var(--tw-shadow);
+}
+
+.card-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center; /* 改为 center 实现垂直居中 */
+  margin-bottom: 0.5rem;
+}
+
+.company-info {
+  flex: 1;
+}
+
+.company-name {
+  font-family: PingFang SC;
+  font-weight: 500;
+  font-style: Medium;
+  font-size: 14px;
+  line-height: 24px;
+  letter-spacing: 0%;
+  margin-bottom: 2px; /* 添加小间距 */
+}
+
+.credit-code {
+  color: rgba(102, 102, 102, 1);
+  font-family: PingFang SC;
+  font-weight: 400;
+  font-style: Regular;
+  font-size: 12px;
+  line-height: 16px;
+  letter-spacing: 0%;
+}
+
+.risk-level {
+  font-family: PingFang SC;
+  font-weight: 500;
+  font-style: Medium;
+  font-size: 12px;
+  line-height: 16px;
+  letter-spacing: 0%;
+  white-space: nowrap; /* 防止文字换行 */
+  margin-left: 1rem; /* 添加左边距 */
+}
+
+/* 添加分割线 */
+.divider {
+  height: 1px;
+  background-color: #f0f0f0;
+  margin: 0.75rem 0;
+  width: 100%; /* 与卡片同宽 */
+}
+
+.card-footer {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.analysis-date {
+  color: rgba(153, 153, 153, 1);
+  font-family: PingFang SC;
+  font-weight: 400;
+  font-style: Regular;
+  font-size: 12px;
+  line-height: 16px;
+  letter-spacing: 0%;
+}
+
+.card-actions {
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+}
+
+.action-icon {
+  color: rgba(102, 102, 102, 1);
+  // font-size: 0.875rem;
+  cursor: pointer;
+}
+
+/* 风险等级颜色 */
+.risk-level.text-red-500 {
+  color: #ff4d4f;
+}
+
+.risk-level.text-orange-500 {
+  color: #fa8c16;
+}
+
+.risk-level.text-green-500 {
+  color: #52c41a;
+}
+
+.risk-level.text-gray-500 {
+  color: #8c8c8c;
+}

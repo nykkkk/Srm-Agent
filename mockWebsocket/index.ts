@@ -1,0 +1,34 @@
+import { sleep } from '@/utils'
+import { ws, http, HttpResponse } from 'msw'
+import { setupWorker } from 'msw/browser'
+import { mockThinkCard } from './mockSocketData'
+import { C_THINK } from '@/constant'
+
+const chat = ws.link('wss://chat.example.com')
+
+const handlers = [
+  chat.addEventListener('connection', ({ client }) => {
+    client.addEventListener('message', async (event) => {
+      console.log('mock receive message：', event.data)
+
+      const send = (m: any) => client.send(JSON.stringify(m))
+
+      if (event.data !== 'ping') {
+        for (const { message } of mockThinkCard) {
+          /* eslint-disable-next-line no-await-in-loop */
+          await sleep(100)
+          client.send(JSON.stringify({ status: C_THINK, message }))
+        }
+
+        send({ message: 'start', status: 'start' })
+        for (let i = 0; i < 5; i++) {
+          send({ message: '12347', status: 'append' })
+        }
+        await sleep(100)
+        send({ message: 'end', status: 'end' })
+      }
+    })
+  }),
+]
+
+export const worker = setupWorker(...handlers)
