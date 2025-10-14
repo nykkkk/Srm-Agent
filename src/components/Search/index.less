@@ -1,0 +1,154 @@
+/* components/SearchInputWithDropdown.css */
+.search-wrapper {
+  position: relative;
+  width: 338px;
+  // margin: 10px 0 1rem 0;
+}
+
+.search-container {
+  position: relative;
+  display: flex;
+  align-items: center;
+  background: linear-gradient(350deg, rgba(2, 91, 255, 0.6) 7.6%, rgba(0, 175, 239, 0.12) 27.6%);
+  padding: 6px;
+  border-radius: 12px;
+  transition: all 0.3s ease;
+  width: 100%;
+}
+
+.search-input {
+  width: 100%;
+  height: 42px;
+  padding: 10px 20px;
+  background-color: #ffffff;
+  border: none;
+  border-radius: 10px;
+  font-weight: 400;
+  font-size: 16px;
+  font-family: PingFang SC;
+  outline: none;
+  box-sizing: border-box;
+  flex: 1;
+}
+
+/* 关键修复：下拉框使用绝对定位，不占用文档流 */
+.dropdown-container {
+  position: absolute;
+  top: calc(100% + 4px); /* 在搜索框下方，加上一点间距 */
+  left: 0;
+  right: 0;
+  background: #ffffff;
+  border: 1px solid #e8e8e8;
+  border-radius: 8px;
+  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.12);
+  z-index: 9999; /* 非常高的 z-index 确保在最上层 */
+  max-height: 280px;
+  overflow-y: auto;
+}
+
+.dropdown-list {
+  padding: 8px 0;
+}
+
+.dropdown-item {
+  padding: 12px 16px;
+  cursor: pointer;
+  border-bottom: 1px solid #f8f8f8;
+  transition: all 0.2s ease;
+  display: flex;
+  align-items: center;
+}
+
+.dropdown-item:hover {
+  background-color: #f8f9fa;
+}
+
+.dropdown-item:last-child {
+  border-bottom: none;
+}
+
+.supplier-info {
+  flex: 1;
+}
+
+.company-name {
+  font-family: PingFang SC;
+  font-weight: 500;
+  font-size: 14px;
+  line-height: 20px;
+  color: #333;
+  margin-bottom: 4px;
+}
+
+.credit-code {
+  font-family: PingFang SC;
+  font-weight: 400;
+  font-size: 12px;
+  line-height: 16px;
+  color: #666;
+}
+
+.highlight-text {
+  background-color: #fff566;
+  color: #333;
+  padding: 0 1px;
+  border-radius: 2px;
+  font-weight: 600;
+}
+
+.clear-button {
+  position: absolute;
+  right: 20px;
+  background: none;
+  border: none;
+  font-size: 18px;
+  color: #999;
+  cursor: pointer;
+  width: 20px;
+  height: 20px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: 50%;
+  transition: background-color 0.2s;
+  z-index: 1;
+}
+
+.clear-button:hover {
+  background-color: #f5f5f5;
+}
+
+.loading-indicator {
+  position: absolute;
+  right: 20px;
+  top: 50%;
+  transform: translateY(-50%);
+  z-index: 1;
+}
+
+.spinner {
+  width: 16px;
+  height: 16px;
+  border: 2px solid #f3f3f3;
+  border-top: 2px solid #1890ff;
+  border-radius: 50%;
+  animation: spin 1s linear infinite;
+}
+
+@keyframes spin {
+  0% {
+    transform: rotate(0deg);
+  }
+  100% {
+    transform: rotate(360deg);
+  }
+}
+
+.dropdown-empty {
+  padding: 20px 16px;
+  text-align: center;
+  color: #999;
+  font-family: PingFang SC;
+  font-size: 14px;
+  background-color: #fafafa;
+}

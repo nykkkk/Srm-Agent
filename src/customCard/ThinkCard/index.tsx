@@ -67,26 +67,26 @@ const main = `${prefix}-main`
 const ThinkCard = (props: ThinkProps) => {
   const state: any = props?.content && props.content?.title ? props.content : null
 
-  // const chatProRef = useChatPro()
+  const chatProRef = useChatPro()
 
-  // const onClick = (type: string | undefined = undefined, id?: string) => {
-  //   chatProRef.setChatMessage(state?.id, (msg: any) => {
-  //     return produce(msg, (draftState: any) => {
-  //       const target = draftState.find((d: any) => d.type === C_THINK)
-  //       if (!target) return
+  const onClick = (type: string | undefined = undefined, id?: string) => {
+    chatProRef.setChatMessage(state?.id, (msg: any) => {
+      return produce(msg, (draftState: any) => {
+        const target = draftState.find((d: any) => d.type === C_THINK)
+        if (!target) return
 
-  //       if (type === 'center') {
-  //         target.content.center.show = !target.content.center.show
-  //       } else if (type === 'bottom') {
-  //         const item = target.content.main.find((d: any) => d.id === id)
-  //         if (!item) return
-  //         item.show = !item.show
-  //       } else {
-  //         target.content.showMain = !target.content.showMain
-  //       }
-  //     })
-  //   })
-  // }
+        if (type === 'center') {
+          target.content.center.show = !target.content.center.show
+        } else if (type === 'bottom') {
+          const item = target.content.main.find((d: any) => d.id === id)
+          if (!item) return
+          item.show = !item.show
+        } else {
+          target.content.showMain = !target.content.showMain
+        }
+      })
+    })
+  }
 
   const stopThink = () => {}
 
@@ -102,7 +102,7 @@ const ThinkCard = (props: ThinkProps) => {
   return (
     <div className={classNames(prefix)}>
       <div className={classNames(`${prefix}-container`)}>
-        <div className={classNames(`${prefix}-title`)}>
+        <div className={classNames(`${prefix}-title`)} onClick={() => onClick()}>
           <div className={classNames(`${prefix}-title-logo`)}>
             {!isComplete && !isStop && <div className={classNames(`${prefix}-title-logo-loading`)} />}
             <div className={classNames(`${prefix}-title-logo-star`)} />
@@ -125,7 +125,7 @@ const ThinkCard = (props: ThinkProps) => {
           <>
             {state?.center && (
               <div className={classNames(`${main}-center`)}>
-                <div className={classNames(`${main}-center-title`)}>
+                <div className={classNames(`${main}-center-title`)} onClick={() => onClick('center')}>
                   <div>{state.center.title}</div>
                   <Icon type="arrow-down" className={classNames(`arrow-icon`, { up: state.center.show })} />
                 </div>
@@ -166,7 +166,10 @@ const ThinkCard = (props: ThinkProps) => {
                   const icon = process === 100 ? dImg : isStop ? awImg : alImg
                   return (
                     <div className={classNames(`${main}-bottom-item`, { show })} key={id}>
-                      <div className={classNames(`${main}-bottom-item-title`, { show })}>
+                      <div
+                        className={classNames(`${main}-bottom-item-title`, { show })}
+                        onClick={() => onClick('bottom', id)}
+                      >
                         <div className="bottom-title">
                           <img className={classNames({ loading: process !== 100 })} src={icon} alt="" />
                           <div>{title}</div>

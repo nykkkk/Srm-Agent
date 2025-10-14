@@ -17,9 +17,11 @@ import { C_LOADING } from '@/constant'
 import { request } from '@/services/websocket'
 import { customerCardRender } from '@/customCard'
 import InputInner from '@/components/InputInner'
+import VoidInput from '@/components/InputInner/voidInput'
 import DislikeModal from '@/components/DisLikeModal'
 import ChatLoading from '@/components/ChatLoading'
-import Home from '@/components/Home'
+// import Home from '@/components/Home'
+import Home from '@/pages/homepage'
 
 import './index.less'
 
@@ -83,7 +85,9 @@ const App = () => {
   }
 
   const chatCardRender: ChatState['chatCardRender'] = (data, dom, isLast) => {
-    return dom
+    if (data?.type === 'robot') {
+      return dom
+    }
   }
 
   const InfiniteScrollContent = ({ hasMore }: { hasMore?: boolean }) => {
@@ -144,8 +148,12 @@ const App = () => {
         robotMeta={{ avatar: null, name: null }}
         onChatsChange={(data) => useStore.getState().setHasChat(data.length > 0)}
         request={() => request({ chatProRef })}
+        // inputProps={{
+        //   inputRender: () => <InputInner ref={inputRef} />,
+        //   agentDisabled: true,
+        // }}
         inputProps={{
-          inputRender: () => <InputInner ref={inputRef} />,
+          inputRender: () => <VoidInput />,
           agentDisabled: true,
         }}
         toolsRender={toolsRender}

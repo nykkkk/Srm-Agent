@@ -16,18 +16,18 @@ export const request: RequestConfig = {
 }
 
 // 在开发环境中启动 mock worker
+if (process.env.NODE_ENV === 'development') {
+  import('../mockWebsocket/index').then(({ worker }) => {
+    worker.start({
+      quiet: true, // 设置为 false 查看详细日志
+    })
+  })
+}
+
 // if (process.env.NODE_ENV === 'development') {
-//   import('../mockWebsocket/index').then(({ worker }) => {
+//   import('../mockWebsocket/websocket').then(({ worker }) => {
 //     worker.start({
 //       quiet: true,
 //     })
 //   })
 // }
-
-if (process.env.NODE_ENV === 'development') {
-  import('../mockWebsocket/websocket').then(({ worker }) => {
-    worker.start({
-      quiet: true,
-    })
-  })
-}

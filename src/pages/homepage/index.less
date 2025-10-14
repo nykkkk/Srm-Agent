@@ -10,12 +10,6 @@ html {
   padding: 0;
 }
 
-// 主容器样式
-.home-container {
-  min-height: 100vh;
-  // width: 100%;
-}
-
 // 顶部导航样式
 .top-navigation {
   position: sticky;
@@ -33,7 +27,7 @@ html {
 
 .navigation-title {
   width: 100%;
-  line-height: 80px;
+  line-height: 50px;
   height: 100%;
   color: #000000;
   text-align: center;
@@ -51,10 +45,34 @@ html {
   padding-right: 20px;
 }
 
+/* Home 页面的 CSS */
+.home-container {
+  position: relative; /* 为下拉框提供定位上下文 */
+  // min-height: 100vh;
+  height: 730px;
+  // 在home的recommend区域固定组件
+  // width:10px;
+}
+
+.main-content {
+  position: relative;
+  z-index: 1; /* 确保内容在正常层级 */
+}
+
+/* 搜索区域容器 - 关键修复 */
+.search-container-area {
+  position: relative;
+  display: flex;
+  justify-content: center;
+  margin-bottom: 1rem;
+  z-index: 10; /* 确保搜索区域有适当的 z-index */
+}
+
 // 欢迎语区域
 .welcome-section {
-  margin-top: 100px;
+  margin-top: 50px;
   position: relative;
+  z-index: 1;
   /* 添加右上方背景图片容器 */
 }
 

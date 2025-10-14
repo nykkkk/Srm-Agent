@@ -181,6 +181,8 @@ export const request: any = (dp: any) => {
       currentId: string,
     ) => {
       init()
+      console.log('websocket init', message)
+
       return message || 'ping'
     },
     transformMessage: (response: any, id, onMessage) => {

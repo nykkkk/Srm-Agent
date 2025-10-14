@@ -174,3 +174,46 @@ export const mockThinkCard = [
     },
   },
 ]
+
+import { Supplier } from '@/components/Search'
+export const recentAnalysis = [
+  {
+    id: 1,
+    companyName: '深圳德稳电子科技有限公司',
+    creditCode: '910000091212221311',
+    date: '2025年10月10日',
+    riskLevel: 'high', // high, medium, low
+  },
+  {
+    id: 2,
+    companyName: '大疆创新公司',
+    creditCode: '910000091212221311',
+    date: '2025年10月11日',
+    riskLevel: 'medium',
+  },
+  {
+    id: 3,
+    companyName: '大疆创新公司',
+    creditCode: '910000091212221311',
+    date: '2025年10月11日',
+    riskLevel: 'medium',
+  },
+]
+
+export const mockSuppliers: Supplier[] = [
+  { id: '1', companyName: '阿里巴巴集团', creditCode: '91330100MA2J4R4K0X' },
+  { id: '2', companyName: '腾讯科技', creditCode: '91440300MA5FQ0QY6R' },
+  { id: '3', companyName: '百度在线', creditCode: '911101087000000000' },
+  { id: '4', companyName: '京东集团', creditCode: '91110302MA006YQY0F' },
+  { id: '5', companyName: '华为技术', creditCode: '914403001922298216' },
+  { id: '6', companyName: '小米科技', creditCode: '91110108MA006YQY0F' },
+  { id: '7', companyName: '字节跳动', creditCode: '91110105MA7BQYQY0F' },
+]
+
+export const mockWsUrl = [
+  {
+    code: 200,
+    message: 'success',
+    data: { wsUrl: 'wss://chat.example.com' },
+  },
+]

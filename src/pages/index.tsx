@@ -1,32 +1,27 @@
 import { useEffect } from 'react'
-import { Outlet } from 'umi'
+import { Outlet, request } from 'umi'
 import { useStore } from '@/store'
 import Loading from '@/components/Loading'
 import changeTheme from '@/utils/changeTheme'
-import { getMockData } from '@/services'
-import React from 'react'
-import { WebSocketMessage, useWebSocket } from '@/services/connect'
-import { WebSocketProvider } from '@/services/WebSocketContext'
+import { getMockData, getRecentAnalysis, getWsUrl } from '@/services'
+import { ChatProProvider } from '@kdcloudjs/kdesign-chatui'
 export default function Index() {
   const globalLoading = useStore((s) => s.globalLoading)
 
+  // 在组件中添加调试
   useEffect(() => {
-    getMockData().then((res) => {
-      console.log('mock data loaded', res)
-    })
-
-    changeTheme({ color: '#276ff5' })
+    const init = async () => {
+      const wsMockData = await getRecentAnalysis()
+      console.log('✅getMockData成功:', wsMockData)
+      changeTheme({ color: '#276ff5' })
+    }
+    init()
   }, [])
 
   return (
-    <WebSocketProvider
-      url="wss://your-websocket-server.com"
-      pingInterval={10000}
-      reconnect={true}
-      reconnectInterval={3000}
-    >
+    <ChatProProvider>
       {globalLoading && <Loading />}
       <Outlet />
-    </WebSocketProvider>
+    </ChatProProvider>
   )
 }
