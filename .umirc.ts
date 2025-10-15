@@ -14,10 +14,9 @@ export default defineConfig({
           path: '/',
           component: '@/pages/index',
           routes: [
-            { path: '/', redirect: '/home' },
-            { path: '/home', component: '@/pages/homepage/index' },
+            { path: '/', redirect: '/chat' },
+            // { path: '/home', component: '@/pages/homepage/index' },
             { path: '/chat', component: '@/pages/chat/index' },
-            { path: '/procurement-risk', component: '@/pages/procurement-risk/index' },
           ],
         },
       ],

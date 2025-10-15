@@ -20,9 +20,11 @@ html {
 .navigation-content {
   display: flex;
   align-items: center;
+  justify-content: center;
   padding-left: 1rem;
   padding-right: 1rem;
   height: 3rem;
+  position: relative;
 }
 
 .navigation-title {
@@ -36,7 +38,6 @@ html {
   font-style: Semibold;
   font-size: 18px;
   letter-spacing: 0%;
-  text-align: center;
 }
 
 // 主内容区样式
@@ -54,6 +55,21 @@ html {
   // width:10px;
 }
 
+.back-arrow {
+  position: absolute;
+  left: 1rem;
+  font-size: 18px;
+  color: #000;
+  cursor: pointer;
+  z-index: 11;
+  padding: 4px;
+  border-radius: 50%;
+  transition: background-color 0.2s;
+}
+.back-arrow:hover {
+  background-color: rgba(0, 0, 0, 0.05);
+}
+
 .main-content {
   position: relative;
   z-index: 1; /* 确保内容在正常层级 */
@@ -61,16 +77,16 @@ html {
 
 /* 搜索区域容器 - 关键修复 */
 .search-container-area {
-  position: relative;
-  display: flex;
-  justify-content: center;
+  // position: relative;
+  // display: flex;
+  // justify-content: center;
   margin-bottom: 1rem;
   z-index: 10; /* 确保搜索区域有适当的 z-index */
 }
 
 // 欢迎语区域
 .welcome-section {
-  margin-top: 50px;
+  margin-top: 80px;
   position: relative;
   z-index: 1;
   /* 添加右上方背景图片容器 */
@@ -130,19 +146,6 @@ html {
   opacity: 0.5; /* 调整透明度 */
   pointer-events: none; /* 确保不影响交互 */
   z-index: -1; /* 确保在内容下方 */
-}
-
-// 搜索框样式
-.search-container {
-  margin-top: 30px;
-  width: 338px;
-  margin-bottom: 1rem;
-  position: relative;
-  display: inline-block;
-  background: linear-gradient(350deg, rgba(2, 91, 255, 0.6) 7.6%, rgba(0, 175, 239, 0.12) 27.6%);
-  padding: 6px;
-  border-radius: 12px;
-  transition: all 0.3s ease;
 }
 
 .search-input {
@@ -323,6 +326,70 @@ html {
   display: flex;
   align-items: center;
   gap: 1rem;
+}
+
+/* 历史搜索样式 */
+.search-history-section {
+  margin-top: 1rem;
+  margin-bottom: 2rem;
+}
+
+.history-title {
+  color: rgba(102, 102, 102, 1);
+  font-family: PingFang SC;
+  font-weight: 400;
+  font-style: Regular;
+  font-size: 14px;
+  line-height: 20px;
+  letter-spacing: 0px;
+  margin-bottom: 0.75rem;
+}
+
+.history-tags {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.5rem;
+}
+
+.history-tag {
+  background-color: #ffffff;
+  border: 1px solid #f0f0f0;
+  border-radius: 6px;
+  padding: 0.5rem 0.75rem;
+  font-family: PingFang SC;
+  font-weight: 400;
+  font-style: Regular;
+  font-size: 12px;
+  line-height: 16px;
+  color: #333333;
+  cursor: pointer;
+  transition: all 0.2s ease;
+  box-shadow: 0 1px 2px rgba(0, 0, 0, 0.05);
+}
+
+.history-tag:hover {
+  background-color: #f8f9fa;
+  border-color: #d9d9d9;
+}
+
+/* 调整分析按钮位置 */
+.analysis-button {
+  margin-top: 20px;
+  width: 100%;
+  background: linear-gradient(90deg, #27caff 0%, #367cff 50.5%, #2eb9ff 100%);
+  color: #ffffff;
+  font-weight: 500;
+  padding-top: 0.75rem;
+  padding-bottom: 0.75rem;
+  border-radius: 9999px;
+  margin-bottom: 1rem; /* 减少底部间距 */
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  box-shadow: 0px 0px 8px 0px rgba(255, 255, 255, 0.59) inset;
+  border: none;
+  cursor: pointer;
+  transition: all 0.3s ease;
 }
 
 .action-icon {

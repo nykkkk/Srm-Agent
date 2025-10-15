@@ -1,8 +1,8 @@
 import { sleep } from '@/utils'
 import { ws, http, HttpResponse } from 'msw'
 import { setupWorker } from 'msw/browser'
-import { mockThinkCard } from './mockSocketData'
-import { C_THINK } from '@/constant'
+import { mockData, mockThinkCard, mockHtml, mockHtml1 } from './mockSocketData'
+import { C_HTML, C_THINK } from '@/constant'
 
 const chat = ws.link('wss://chat.example.com')
 
@@ -20,12 +20,17 @@ const handlers = [
           client.send(JSON.stringify({ status: C_THINK, message }))
         }
 
-        send({ message: 'start', status: 'start' })
-        for (let i = 0; i < 5; i++) {
-          send({ message: '12347', status: 'append' })
-        }
-        await sleep(100)
-        send({ message: 'end', status: 'end' })
+        // send({ message: 'start', status: 'start' })
+        send({
+          status: C_HTML,
+          message: mockHtml1,
+        })
+        // for (let i = 0; i < 5; i++) {
+        //   send({ message: '12347', status: 'append' })
+        // }
+        // send({ message: mockData, status: 'end' })
+        // await sleep(100)
+        // send({ message: 'end', status: 'end' })
       }
     })
   }),

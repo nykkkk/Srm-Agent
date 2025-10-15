@@ -7,5 +7,6 @@ export const IS_DING = /Ding/i.test(navigator.userAgent)
 export const IS_WXWORK = /wxwork/i.test(navigator.userAgent)
 
 export const C_THINK = 'thinkCard'
+export const C_HTML = 'htmlCard'
 export const C_LOADING = 'chatLoading'
 export const C_FILE = 'fileCard'

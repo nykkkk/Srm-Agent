@@ -1,8 +1,7 @@
 /* components/SearchInputWithDropdown.css */
 .search-wrapper {
   position: relative;
-  width: 338px;
-  // margin: 10px 0 1rem 0;
+  margin-top: 30px;
 }
 
 .search-container {
@@ -31,39 +30,32 @@
   flex: 1;
 }
 
-/* 关键修复：下拉框使用绝对定位，不占用文档流 */
-.dropdown-container {
+/* 无边框无背景的搜索建议样式 */
+.suggestions-container {
   position: absolute;
-  top: calc(100% + 4px); /* 在搜索框下方，加上一点间距 */
+  top: calc(100% + 4px);
   left: 0;
   right: 0;
-  background: #ffffff;
-  border: 1px solid #e8e8e8;
-  border-radius: 8px;
-  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.12);
-  z-index: 9999; /* 非常高的 z-index 确保在最上层 */
-  max-height: 280px;
-  overflow-y: auto;
+  z-index: 9999;
 }
 
-.dropdown-list {
-  padding: 8px 0;
+.suggestions-list {
+  background: transparent;
+  border: none;
+  border-radius: 0;
+  box-shadow: none;
 }
 
-.dropdown-item {
+.suggestion-item {
   padding: 12px 16px;
   cursor: pointer;
-  border-bottom: 1px solid #f8f8f8;
   transition: all 0.2s ease;
   display: flex;
   align-items: center;
+  border-radius: 0;
 }
 
-.dropdown-item:hover {
-  background-color: #f8f9fa;
-}
-
-.dropdown-item:last-child {
+.suggestion-item:last-child {
   border-bottom: none;
 }
 
@@ -88,12 +80,13 @@
   color: #666;
 }
 
+/* 修改高亮文本样式：黄色背景改为蓝色字体 */
 .highlight-text {
-  background-color: #fff566;
-  color: #333;
-  padding: 0 1px;
-  border-radius: 2px;
+  color: #1890ff; /* 蓝色字体 */
   font-weight: 600;
+  background-color: transparent; /* 移除背景色 */
+  padding: 0;
+  border-radius: 0;
 }
 
 .clear-button {
@@ -114,9 +107,9 @@
   z-index: 1;
 }
 
-.clear-button:hover {
-  background-color: #f5f5f5;
-}
+// .clear-button:hover {
+//   background-color: #f5f5f5;
+// }
 
 .loading-indicator {
   position: absolute;
@@ -150,5 +143,5 @@
   color: #999;
   font-family: PingFang SC;
   font-size: 14px;
-  background-color: #fafafa;
+  // background-color: #fafafa;
 }

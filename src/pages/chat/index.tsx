@@ -69,7 +69,8 @@ const App = () => {
   }
 
   const toolsRender: ChatState['toolsRender'] = ({ cardData }, dom, { className, tools }) => {
-    return dom
+    // return dom
+    return <></>
   }
 
   const cardExtraInnerRender: ChatState['cardExtraInnerRender'] = (data, isLast) => {
@@ -170,11 +171,20 @@ const App = () => {
         container={{ enable: false }}
         customerCardRender={customerCardRender}
         markdownProps={{ showThinkComponent: true, contentFormat }}
+        iframeProps={{}}
+        // ------type: typeof IFRAME;
+        // prefixCls?: string;
+        // className?: string;
+        // content?: string;
+        // style?: Record<string, unknown>;
+        // src?: string;
+        // title?: string;
+        // onCompleted?: (isComplete: boolean) => void;
         dispatchTimer={{ singleTyping: 500 }}
         // genMessageId={() => `${new Date().getTime()}`}
       />
-      <div style={{ width: '1px' }} ref={bottomRef} />
-      <DislikeModal {...{ dislikeData, visibleDisLike, setVisibleDisLike }} />
+      {/* <div style={{ width: '1px' }} ref={bottomRef} /> */}
+      {/* <DislikeModal {...{ dislikeData, visibleDisLike, setVisibleDisLike }} /> */}
     </div>
   )
 }
