@@ -14,6 +14,7 @@ interface SearchInputWithDropdownProps {
   onSearch?: (query: string) => void
   onFocus?: () => void
   onBlur?: () => void
+  onClear?: () => void
   onSearchResultsShow?: (hasResults: boolean) => void
   isInputFocused?: boolean
   isFromHistory?: boolean // 新增属性：是否来自历史搜索
@@ -24,6 +25,7 @@ const SearchInputWithDropdown: React.FC<SearchInputWithDropdownProps> = ({
   onSearch,
   onFocus,
   onBlur,
+  onClear,
   onSearchResultsShow,
   isInputFocused,
   isFromHistory, // 接收是否来自历史搜索的标记
@@ -35,6 +37,7 @@ const SearchInputWithDropdown: React.FC<SearchInputWithDropdownProps> = ({
   const [isLoading, setIsLoading] = useState(false)
   const isSelectingRef = useRef(false)
   const dropdownRef = useRef<HTMLDivElement>(null)
+  const inputRef = useRef<HTMLInputElement>(null)
 
   // 搜索逻辑 - 使用 Mock 数据
   useEffect(() => {
@@ -108,6 +111,12 @@ const SearchInputWithDropdown: React.FC<SearchInputWithDropdownProps> = ({
     setSuggestions([])
     onSearchResultsShow?.(false)
     onSelectSupplier?.(supplier)
+
+    // 然后重新聚焦输入框
+    setTimeout(() => {
+      inputRef.current?.focus()
+      console.log('重新聚焦输入框')
+    }, 10)
   }
 
   // 高亮匹配文本
@@ -134,14 +143,32 @@ const SearchInputWithDropdown: React.FC<SearchInputWithDropdownProps> = ({
 
   // 清空搜索
   const handleClear = () => {
+    console.log('执行清空操作')
+    isSelectingRef.current = true
+
+    // 先清空输入值
     setInputValue('')
     setSuggestions([])
     setShowDropdown(false)
     onSearchResultsShow?.(false)
+
+    // 通知父组件清空操作
+    onClear?.()
+
+    // 保持输入框焦点
+    setTimeout(() => {
+      inputRef.current?.focus()
+      // 延迟重置选择状态
+      setTimeout(() => {
+        isSelectingRef.current = false
+      }, 100)
+    }, 10)
   }
 
   // 处理输入框焦点
   const handleFocus = (e: React.FocusEvent<HTMLInputElement>) => {
+    console.log('聚焦')
+
     if (inputValue.trim() && suggestions.length > 0 && !isFromHistory) {
       setShowDropdown(true)
       onSearchResultsShow?.(true)
@@ -157,6 +184,7 @@ const SearchInputWithDropdown: React.FC<SearchInputWithDropdownProps> = ({
     <div className="search-wrapper" ref={dropdownRef}>
       <div className="search-container">
         <input
+          ref={inputRef}
           type="text"
           value={inputValue}
           onChange={(e) => setInputValue(e.target.value)}
@@ -168,7 +196,13 @@ const SearchInputWithDropdown: React.FC<SearchInputWithDropdownProps> = ({
 
         {/* 清空按钮 */}
         {inputValue && (
-          <button className="clear-button" onClick={handleClear}>
+          <button
+            className="clear-button"
+            onClick={handleClear}
+            onMouseDown={(e) => {
+              e.preventDefault() // 防止失焦
+            }}
+          >
             ×
           </button>
         )}

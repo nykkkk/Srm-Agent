@@ -1,6 +1,5 @@
 import React, { useState, useRef, useEffect } from 'react'
 import type { FC } from 'react'
-import { useNavigate } from 'umi'
 import { Toast, TextArea } from 'kdesign-mobile'
 import { ArrowLeftOutlined, ShareAltOutlined, EyeOutlined, RightOutlined, ArrowRightOutlined } from '@ant-design/icons'
 import { BaseMessage, ChatMessage, useChatPro } from '@kdcloudjs/kdesign-chatui'
@@ -11,7 +10,6 @@ import { C_FILE } from '@/constant'
 import SearchInputWithDropdown from '@/components/Search'
 
 const Home: FC = () => {
-  const navigate = useNavigate()
   const textareaRef = useRef<any>(null)
   const [recentAnalysis, setRecentAnalysis] = useState<any[]>([])
   const [loading, setLoading] = useState(false)
@@ -24,7 +22,6 @@ const Home: FC = () => {
     '字节跳动',
   ])
   const [isInputFocused, setIsInputFocused] = useState(false)
-  const [showBackArrow, setShowBackArrow] = useState(false)
   const [hasSearchResults, setHasSearchResults] = useState(false)
   const [isFromHistory, setIsFromHistory] = useState(false) // 新增状态标记是否来自历史搜索
   const disabled = loading
@@ -33,6 +30,9 @@ const Home: FC = () => {
   const fileDoneList = (fileList || []).filter((d) => d.status === 'done')
   const locale = useStore((s) => s.locale)
   const hasChat = useStore((s) => s.hasChat)
+  // 使用 ref 来跟踪选择状态，避免闭包问题
+  const isSelectingRef = useRef(false)
+  const blurTimeoutRef = useRef<NodeJS.Timeout>()
 
   const chatProRef = useChatPro()
 
@@ -101,33 +101,82 @@ const Home: FC = () => {
 
   // 处理搜索历史点击
   const handleHistoryClick = (companyName: string) => {
-    setIsFromHistory(true) // 标记来自历史搜索
+    console.log('点击历史搜索:', companyName)
+    setIsFromHistory(true)
+    isSelectingRef.current = true // 使用 ref 来标记选择状态
+
     useStore.getState().setInputValue(companyName)
-    // 不触发模糊搜索，直接隐藏搜索结果
     setHasSearchResults(false)
+
+    // 清除之前的 blur timeout
+    if (blurTimeoutRef.current) {
+      clearTimeout(blurTimeoutRef.current)
+    }
+
+    // 延迟重置选择状态
+    setTimeout(() => {
+      isSelectingRef.current = false
+    }, 300)
+  }
+
+  // 返回初始状态
+  const returnToInitialState = () => {
+    setIsInputFocused(false)
+    setHasSearchResults(false)
+    setIsFromHistory(false)
   }
 
   // 处理输入框焦点变化
   const handleInputFocus = () => {
+    console.log('输入框获得焦点')
     setIsInputFocused(true)
-    setShowBackArrow(true)
     setIsFromHistory(false) // 重置标记
+
+    // 清除之前的 blur timeout
+    if (blurTimeoutRef.current) {
+      clearTimeout(blurTimeoutRef.current)
+    }
   }
 
   const handleInputBlur = () => {
-    // 延迟隐藏，以便点击操作可以完成
-    setTimeout(() => {
-      // 不在这里重置状态，只在点击返回箭头时重置
-    }, 200)
+    console.log('输入框失去焦点, isSelecting:', isSelectingRef.current)
+
+    // 清除之前的 timeout
+    if (blurTimeoutRef.current) {
+      clearTimeout(blurTimeoutRef.current)
+    }
+
+    // 延迟执行，给点击操作留出时间
+    blurTimeoutRef.current = setTimeout(() => {
+      // 如果正在选择（点击历史搜索或下拉建议），不执行返回逻辑
+      if (isSelectingRef.current) {
+        console.log('正在选择，不返回初始状态')
+        return
+      }
+
+      // 检查是否还有搜索结果显示
+      if (!hasSearchResults) {
+        console.log('没有搜索结果，返回初始状态')
+        returnToInitialState()
+      }
+    }, 150)
   }
 
-  // 处理返回箭头点击
-  const handleBackClick = () => {
-    setIsInputFocused(false)
-    setShowBackArrow(false)
-    setHasSearchResults(false)
-    setIsFromHistory(false) // 重置标记
-    useStore.getState().setInputValue('')
+  // 处理清空搜索
+  const handleClearSearch = () => {
+    console.log('处理清空搜索')
+    isSelectingRef.current = true
+
+    // 清除之前的 blur timeout
+    if (blurTimeoutRef.current) {
+      clearTimeout(blurTimeoutRef.current)
+    }
+
+    // 延迟重置选择状态
+    setTimeout(() => {
+      isSelectingRef.current = false
+      console.log('清空搜索选择状态重置')
+    }, 300)
   }
 
   // 处理模糊搜索结果显示
@@ -136,6 +185,23 @@ const Home: FC = () => {
     if (!isFromHistory) {
       setHasSearchResults(hasResults)
     }
+  }
+  // 处理选择供应商
+  const handleSelectSupplier = (supplier: any) => {
+    console.log('选择供应商:', supplier)
+    isSelectingRef.current = true
+    setHasSearchResults(false)
+    setIsFromHistory(false)
+
+    // 清除之前的 blur timeout
+    if (blurTimeoutRef.current) {
+      clearTimeout(blurTimeoutRef.current)
+    }
+
+    // 延迟重置选择状态
+    setTimeout(() => {
+      isSelectingRef.current = false
+    }, 500)
   }
 
   const getRiskLevelText = (level: string) => {
@@ -169,7 +235,6 @@ const Home: FC = () => {
       {/* 顶部导航 */}
       <div className="top-navigation">
         <div className="navigation-content">
-          {showBackArrow && <ArrowLeftOutlined className="back-arrow" onClick={handleBackClick} />}
           <div className="navigation-title">采购智能风控智能体</div>
         </div>
       </div>
@@ -192,13 +257,8 @@ const Home: FC = () => {
           <SearchInputWithDropdown
             onFocus={handleInputFocus}
             onBlur={handleInputBlur}
-            onSelectSupplier={(supplier) => {
-              console.log('选中供应商:', supplier)
-              useStore.getState().setInputValue(supplier.companyName)
-              // 选择供应商后应该显示开始分析按钮
-              setHasSearchResults(false)
-              setIsFromHistory(false) // 重置标记
-            }}
+            onSelectSupplier={handleSelectSupplier}
+            onClear={handleClearSearch} // 新增清空回调
             onSearch={(query) => {
               console.log('搜索关键词:', query)
               setIsFromHistory(false) // 重置标记
@@ -223,7 +283,14 @@ const Home: FC = () => {
             <div className="history-title">历史搜索</div>
             <div className="history-tags">
               {searchHistory.map((history, index) => (
-                <div key={index} className="history-tag" onClick={() => handleHistoryClick(history)}>
+                <div
+                  key={index}
+                  className="history-tag"
+                  onMouseDown={(e) => {
+                    e.preventDefault() // 关键：防止失焦
+                    handleHistoryClick(history)
+                  }}
+                >
                   {history}
                 </div>
               ))}
