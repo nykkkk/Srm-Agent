@@ -17,7 +17,8 @@ interface SearchInputWithDropdownProps {
   onClear?: () => void
   onSearchResultsShow?: (hasResults: boolean) => void
   isInputFocused?: boolean
-  isFromHistory?: boolean // 新增属性：是否来自历史搜索
+  setIsInputFocused?: (focused: boolean) => void
+  isFromHistory?: boolean
 }
 
 const SearchInputWithDropdown: React.FC<SearchInputWithDropdownProps> = ({
@@ -28,7 +29,8 @@ const SearchInputWithDropdown: React.FC<SearchInputWithDropdownProps> = ({
   onClear,
   onSearchResultsShow,
   isInputFocused,
-  isFromHistory, // 接收是否来自历史搜索的标记
+  setIsInputFocused,
+  isFromHistory,
 }) => {
   const inputValue = useStore((s) => s.inputValue)
   const setInputValue = (value: string) => useStore.getState().setInputValue(value)
@@ -39,9 +41,18 @@ const SearchInputWithDropdown: React.FC<SearchInputWithDropdownProps> = ({
   const dropdownRef = useRef<HTMLDivElement>(null)
   const inputRef = useRef<HTMLInputElement>(null)
 
-  // 搜索逻辑 - 使用 Mock 数据
+  // 内部焦点状态管理
+  const [internalIsFocused, setInternalIsFocused] = useState(false)
+
+  // 同步外部焦点状态
   useEffect(() => {
-    // 如果来自历史搜索，不执行搜索
+    if (isInputFocused !== undefined) {
+      setInternalIsFocused(isInputFocused)
+    }
+  }, [isInputFocused])
+
+  // 搜索逻辑
+  useEffect(() => {
     if (isFromHistory) {
       setSuggestions([])
       setShowDropdown(false)
@@ -65,7 +76,6 @@ const SearchInputWithDropdown: React.FC<SearchInputWithDropdownProps> = ({
       setIsLoading(true)
 
       try {
-        // 使用 Mock 数据进行模糊搜索
         const filteredSuppliers = await getSuppliers(inputValue)
 
         setSuggestions(filteredSuppliers)
@@ -86,7 +96,7 @@ const SearchInputWithDropdown: React.FC<SearchInputWithDropdownProps> = ({
 
     const debounceTimer = setTimeout(searchSuppliers, 300)
     return () => clearTimeout(debounceTimer)
-  }, [inputValue, onSearch, onSearchResultsShow, isFromHistory]) // 添加 isFromHistory 依赖
+  }, [inputValue, onSearch, onSearchResultsShow, isFromHistory])
 
   // 点击外部关闭下拉框
   useEffect(() => {
@@ -103,20 +113,37 @@ const SearchInputWithDropdown: React.FC<SearchInputWithDropdownProps> = ({
     }
   }, [onSearchResultsShow])
 
-  // 选择供应商
+  // 选择供应商 - 修复焦点问题
   const handleSelectSupplier = (supplier: Supplier) => {
+    console.log('选择供应商:', supplier.companyName)
     isSelectingRef.current = true
+
+    // 先设置输入值
     setInputValue(supplier.companyName)
     setShowDropdown(false)
     setSuggestions([])
     onSearchResultsShow?.(false)
+
+    // 立即设置焦点状态，确保样式正确
+    setInternalIsFocused(true)
+    setIsInputFocused?.(true)
+
+    // 通知父组件
     onSelectSupplier?.(supplier)
 
-    // 然后重新聚焦输入框
+    // 重新聚焦输入框
     setTimeout(() => {
       inputRef.current?.focus()
-      console.log('重新聚焦输入框')
+      console.log('重新聚焦输入框，保持聚焦样式')
+      // 再次确认焦点状态
+      setInternalIsFocused(true)
+      setIsInputFocused?.(true)
     }, 10)
+
+    // 延迟重置选择状态
+    setTimeout(() => {
+      isSelectingRef.current = false
+    }, 300)
   }
 
   // 高亮匹配文本
@@ -141,33 +168,25 @@ const SearchInputWithDropdown: React.FC<SearchInputWithDropdownProps> = ({
     )
   }
 
-  // 清空搜索
+  // 清空搜索 - 只清除文本，保持焦点
   const handleClear = () => {
-    console.log('执行清空操作')
-    isSelectingRef.current = true
-
-    // 先清空输入值
+    console.log('清空输入文本')
     setInputValue('')
     setSuggestions([])
     setShowDropdown(false)
     onSearchResultsShow?.(false)
 
-    // 通知父组件清空操作
-    onClear?.()
-
     // 保持输入框焦点
     setTimeout(() => {
       inputRef.current?.focus()
-      // 延迟重置选择状态
-      setTimeout(() => {
-        isSelectingRef.current = false
-      }, 100)
     }, 10)
   }
 
   // 处理输入框焦点
   const handleFocus = (e: React.FocusEvent<HTMLInputElement>) => {
-    console.log('聚焦')
+    console.log('输入框获得焦点')
+    setInternalIsFocused(true)
+    setIsInputFocused?.(true)
 
     if (inputValue.trim() && suggestions.length > 0 && !isFromHistory) {
       setShowDropdown(true)
@@ -177,12 +196,47 @@ const SearchInputWithDropdown: React.FC<SearchInputWithDropdownProps> = ({
   }
 
   const handleBlur = (e: React.FocusEvent<HTMLInputElement>) => {
+    console.log('输入框失去焦点')
+
+    // 延迟处理失焦，给点击操作留出时间
+    setTimeout(() => {
+      if (!isSelectingRef.current) {
+        setInternalIsFocused(false)
+        setIsInputFocused?.(false)
+        console.log('执行失焦逻辑')
+      } else {
+        console.log('正在选择操作，跳过失焦')
+      }
+    }, 200)
     onBlur?.()
   }
 
+  // 取消按钮处理函数 - 模拟真实 blur 事件
+  const handleCancel = () => {
+    console.log('点击取消，模拟 blur 事件')
+
+    // 标记为非选择操作
+    isSelectingRef.current = false
+
+    // 创建并分发 blur 事件
+    if (inputRef.current) {
+      const blurEvent = new FocusEvent('blur', {
+        bubbles: true,
+        cancelable: true,
+      })
+      inputRef.current.dispatchEvent(blurEvent)
+    }
+
+    // 确保失去焦点
+    inputRef.current?.blur()
+  }
+
+  // 使用内部焦点状态或外部焦点状态
+  const shouldShowFocusedStyle = internalIsFocused
+
   return (
     <div className="search-wrapper" ref={dropdownRef}>
-      <div className="search-container">
+      <div className={`search-container ${shouldShowFocusedStyle ? 'search-focused' : ''}`}>
         <input
           ref={inputRef}
           type="text"
@@ -194,16 +248,30 @@ const SearchInputWithDropdown: React.FC<SearchInputWithDropdownProps> = ({
           className="search-input"
         />
 
-        {/* 清空按钮 */}
+        {/* 清空按钮 - 只在有输入值时显示，不区分焦点状态 */}
         {inputValue && (
           <button
             className="clear-button"
             onClick={handleClear}
             onMouseDown={(e) => {
-              e.preventDefault() // 防止失焦
+              e.preventDefault()
             }}
           >
             ×
+          </button>
+        )}
+
+        {/* 取消按钮 - 只在聚焦状态显示 */}
+        {shouldShowFocusedStyle && (
+          <button
+            className="cancel-button"
+            onClick={handleCancel}
+            onMouseDown={(e) => {
+              e.preventDefault()
+            }}
+            type="button"
+          >
+            取消
           </button>
         )}
 
@@ -215,12 +283,19 @@ const SearchInputWithDropdown: React.FC<SearchInputWithDropdownProps> = ({
         )}
       </div>
 
-      {/* 白色背景的下拉建议框 - 直接从输入框下方弹出 */}
-      {showDropdown && isInputFocused && !isFromHistory && (
+      {/* 下拉建议框 */}
+      {showDropdown && shouldShowFocusedStyle && !isFromHistory && (
         <div className="suggestions-container">
           <div className="suggestions-list">
             {suggestions.map((supplier) => (
-              <div key={supplier.id} className="suggestion-item" onClick={() => handleSelectSupplier(supplier)}>
+              <div
+                key={supplier.id}
+                className="suggestion-item"
+                onMouseDown={(e) => {
+                  e.preventDefault()
+                  handleSelectSupplier(supplier)
+                }}
+              >
                 <div className="supplier-info">
                   <div className="company-name">{highlightText(supplier.companyName, inputValue)}</div>
                   <div className="credit-code">{highlightText(supplier.creditCode, inputValue)}</div>

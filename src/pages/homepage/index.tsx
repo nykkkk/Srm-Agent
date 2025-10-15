@@ -8,6 +8,7 @@ import { useStore } from '@/store'
 import { getRecentAnalysis } from '@/services'
 import { C_FILE } from '@/constant'
 import SearchInputWithDropdown from '@/components/Search'
+import { getRiskLevelText, getRiskLevelColor } from '@/constant'
 
 const Home: FC = () => {
   const textareaRef = useRef<any>(null)
@@ -23,16 +24,23 @@ const Home: FC = () => {
   ])
   const [isInputFocused, setIsInputFocused] = useState(false)
   const [hasSearchResults, setHasSearchResults] = useState(false)
-  const [isFromHistory, setIsFromHistory] = useState(false) // 新增状态标记是否来自历史搜索
+  const [isFromHistory, setIsFromHistory] = useState(false)
   const disabled = loading
   const inputValue = useStore((s) => s.inputValue)
   const fileList = useStore((s) => s.fileList)
   const fileDoneList = (fileList || []).filter((d) => d.status === 'done')
   const locale = useStore((s) => s.locale)
   const hasChat = useStore((s) => s.hasChat)
+
   // 使用 ref 来跟踪选择状态，避免闭包问题
   const isSelectingRef = useRef(false)
   const blurTimeoutRef = useRef<NodeJS.Timeout>()
+
+  // 动画状态
+  const [showWelcome, setShowWelcome] = useState(true)
+  const [showRecentAnalysis, setShowRecentAnalysis] = useState(true)
+  const [showSearchHistory, setShowSearchHistory] = useState(false)
+  const [isSearchBarMoved, setIsSearchBarMoved] = useState(false)
 
   const chatProRef = useChatPro()
 
@@ -49,7 +57,7 @@ const Home: FC = () => {
 
     // 添加到搜索历史
     if (message && !searchHistory.includes(message)) {
-      const newHistory = [message, ...searchHistory.slice(0, 4)] // 最多保存5条
+      const newHistory = [message, ...searchHistory.slice(0, 4)]
       setSearchHistory(newHistory)
     }
 
@@ -83,7 +91,6 @@ const Home: FC = () => {
       try {
         const res = await getRecentAnalysis()
         console.log('获取最近分析数据成功:', res)
-        // 检查响应是否有效并更新状态
         if (res && Array.isArray(res)) {
           setRecentAnalysis(res)
         } else {
@@ -101,19 +108,15 @@ const Home: FC = () => {
 
   // 处理搜索历史点击
   const handleHistoryClick = (companyName: string) => {
-    console.log('点击历史搜索:', companyName)
     setIsFromHistory(true)
-    isSelectingRef.current = true // 使用 ref 来标记选择状态
-
+    isSelectingRef.current = true
     useStore.getState().setInputValue(companyName)
     setHasSearchResults(false)
 
-    // 清除之前的 blur timeout
     if (blurTimeoutRef.current) {
       clearTimeout(blurTimeoutRef.current)
     }
 
-    // 延迟重置选择状态
     setTimeout(() => {
       isSelectingRef.current = false
     }, 300)
@@ -121,21 +124,38 @@ const Home: FC = () => {
 
   // 返回初始状态
   const returnToInitialState = () => {
+    useStore.getState().setInputValue('')
     setIsInputFocused(false)
     setHasSearchResults(false)
     setIsFromHistory(false)
+
+    // 动画：隐藏搜索历史，显示欢迎区域和最近分析，搜索栏回到原位置
+    setShowSearchHistory(false)
+    setIsSearchBarMoved(false)
+    setTimeout(() => {
+      setShowWelcome(true)
+      setShowRecentAnalysis(true)
+    }, 150)
   }
 
   // 处理输入框焦点变化
   const handleInputFocus = () => {
     console.log('输入框获得焦点')
     setIsInputFocused(true)
-    setIsFromHistory(false) // 重置标记
+    setIsFromHistory(false)
 
     // 清除之前的 blur timeout
     if (blurTimeoutRef.current) {
       clearTimeout(blurTimeoutRef.current)
     }
+
+    // 动画：隐藏欢迎区域和最近分析，搜索栏向上移动，显示搜索历史
+    setShowWelcome(false)
+    setShowRecentAnalysis(false)
+    setIsSearchBarMoved(true)
+    setTimeout(() => {
+      setShowSearchHistory(true)
+    }, 150)
   }
 
   const handleInputBlur = () => {
@@ -148,13 +168,11 @@ const Home: FC = () => {
 
     // 延迟执行，给点击操作留出时间
     blurTimeoutRef.current = setTimeout(() => {
-      // 如果正在选择（点击历史搜索或下拉建议），不执行返回逻辑
       if (isSelectingRef.current) {
         console.log('正在选择，不返回初始状态')
         return
       }
 
-      // 检查是否还有搜索结果显示
       if (!hasSearchResults) {
         console.log('没有搜索结果，返回初始状态')
         returnToInitialState()
@@ -167,12 +185,10 @@ const Home: FC = () => {
     console.log('处理清空搜索')
     isSelectingRef.current = true
 
-    // 清除之前的 blur timeout
     if (blurTimeoutRef.current) {
       clearTimeout(blurTimeoutRef.current)
     }
 
-    // 延迟重置选择状态
     setTimeout(() => {
       isSelectingRef.current = false
       console.log('清空搜索选择状态重置')
@@ -181,11 +197,11 @@ const Home: FC = () => {
 
   // 处理模糊搜索结果显示
   const handleSearchResultsShow = (hasResults: boolean) => {
-    // 如果来自历史搜索，不显示搜索结果
     if (!isFromHistory) {
       setHasSearchResults(hasResults)
     }
   }
+
   // 处理选择供应商
   const handleSelectSupplier = (supplier: any) => {
     console.log('选择供应商:', supplier)
@@ -193,42 +209,23 @@ const Home: FC = () => {
     setHasSearchResults(false)
     setIsFromHistory(false)
 
-    // 清除之前的 blur timeout
     if (blurTimeoutRef.current) {
       clearTimeout(blurTimeoutRef.current)
     }
 
-    // 延迟重置选择状态
     setTimeout(() => {
       isSelectingRef.current = false
     }, 500)
   }
 
-  const getRiskLevelText = (level: string) => {
-    switch (level) {
-      case 'high':
-        return '高风险'
-      case 'medium':
-        return '中风险'
-      case 'low':
-        return '低风险'
-      default:
-        return '未知风险'
+  // 清理 timeout
+  useEffect(() => {
+    return () => {
+      if (blurTimeoutRef.current) {
+        clearTimeout(blurTimeoutRef.current)
+      }
     }
-  }
-
-  const getRiskLevelColor = (level: string) => {
-    switch (level) {
-      case 'high':
-        return 'text-red-500'
-      case 'medium':
-        return 'text-orange-500'
-      case 'low':
-        return 'text-green-500'
-      default:
-        return 'text-gray-500'
-    }
-  }
+  }, [])
 
   const home = (
     <div className="home-container">
@@ -244,32 +241,32 @@ const Home: FC = () => {
 
       {/* 主内容区 */}
       <div className="main-content">
-        {/* 欢迎语区域 - 只在初始状态显示 */}
-        {!isInputFocused && (
-          <div className="welcome-section">
-            <div className="greeting-primary">Hi,</div>
-            <div className="greeting-secondary">我是采购智能风控</div>
-            <div className="greeting-description">敏捷赋能采购问题从洞见到解决</div>
-          </div>
-        )}
+        {/* 欢迎语区域 - 带渐入渐出动画 */}
+        <div className={`welcome-section ${showWelcome ? 'fade-in' : 'fade-out'}`}>
+          <div className="greeting-primary">Hi,</div>
+          <div className="greeting-secondary">用户名</div>
+          {/* <div className="greeting-description">敏捷赋能采购问题从洞见到解决</div> */}
+        </div>
 
-        <div className="search-container-area">
+        {/* 搜索区域 - 带移动动画 */}
+        <div className={`search-container-area ${isSearchBarMoved ? 'search-bar-moved' : ''}`}>
           <SearchInputWithDropdown
             onFocus={handleInputFocus}
             onBlur={handleInputBlur}
             onSelectSupplier={handleSelectSupplier}
-            onClear={handleClearSearch} // 新增清空回调
+            onClear={handleClearSearch}
             onSearch={(query) => {
               console.log('搜索关键词:', query)
-              setIsFromHistory(false) // 重置标记
+              setIsFromHistory(false)
             }}
             onSearchResultsShow={handleSearchResultsShow}
             isInputFocused={isInputFocused}
-            isFromHistory={isFromHistory} // 传递标记给搜索组件
+            setIsInputFocused={setIsInputFocused}
+            isFromHistory={isFromHistory}
           />
         </div>
 
-        {/* 开始分析按钮 - 只在没有搜索结果显示时显示，或者来自历史搜索时也显示 */}
+        {/* 开始分析按钮 */}
         {(!hasSearchResults || isFromHistory) && (
           <button onClick={() => onSend()} className="analysis-button">
             <RightOutlined className="button-icon" />
@@ -277,64 +274,59 @@ const Home: FC = () => {
           </button>
         )}
 
-        {/* 历史搜索 - 只在输入框聚焦且没有模糊搜索结果时显示 */}
-        {isInputFocused && searchHistory.length > 0 && !hasSearchResults && (
-          <div className="search-history-section">
-            <div className="history-title">历史搜索</div>
-            <div className="history-tags">
-              {searchHistory.map((history, index) => (
-                <div
-                  key={index}
-                  className="history-tag"
-                  onMouseDown={(e) => {
-                    e.preventDefault() // 关键：防止失焦
-                    handleHistoryClick(history)
-                  }}
-                >
-                  {history}
-                </div>
-              ))}
-            </div>
+        {/* 历史搜索 - 带渐入渐出动画 */}
+        <div className={`search-history-section ${showSearchHistory ? 'fade-in' : 'fade-out'}`}>
+          <div className="history-title">历史搜索</div>
+          <div className="history-tags">
+            {searchHistory.map((history, index) => (
+              <div
+                key={index}
+                className="history-tag"
+                onMouseDown={(e) => {
+                  e.preventDefault()
+                  handleHistoryClick(history)
+                }}
+              >
+                {history}
+              </div>
+            ))}
           </div>
-        )}
+        </div>
 
-        {/* 最近分析 - 只在初始状态显示 */}
-        {!isInputFocused && (
-          <div className="recent-analysis">
-            <div className="section-header">
-              <div className="section-title">最近分析</div>
-              {/* <div className="view-more">查看更多 {`>`}</div> */}
-            </div>
+        {/* 最近分析 - 带渐入渐出动画 */}
+        <div className={`recent-analysis ${showRecentAnalysis ? 'fade-in' : 'fade-out'}`}>
+          <div className="section-header">
+            <div className="section-title">最近分析</div>
+          </div>
 
-            <div className="analysis-list">
-              {loading ? (
-                <div className="loading-state">加载中...</div>
-              ) : (
-                recentAnalysis.map((item) => (
-                  <div key={item.id} className="analysis-card">
-                    <div className="card-header">
-                      <div className="company-info">
-                        <div className="company-name">{item.companyName}</div>
-                        <div className="credit-code">{item.creditCode}</div>
-                      </div>
-                      <div className={`risk-level ${getRiskLevelColor(item.riskLevel)}`}>
-                        {getRiskLevelText(item.riskLevel)}
-                      </div>
+          <div className="analysis-list">
+            {loading ? (
+              <div className="loading-state">加载中...</div>
+            ) : (
+              recentAnalysis.map((item) => (
+                <div key={item.id} className="analysis-card">
+                  <div className="card-header">
+                    <div className="company-info">
+                      <div className="company-name">{item.companyName}</div>
+                      <div className="credit-code">{item.creditCode}</div>
                     </div>
-                    <div className="divider"></div>
-                    <div className="card-footer">
-                      <div className="analysis-date">{item.date}</div>
-                      <div className="card-actions">
-                        <ShareAltOutlined className="action-icon" />
-                        <EyeOutlined className="action-icon" />
-                      </div>
+                    <div className={`risk-level ${getRiskLevelColor(item.riskLevel)}`}>
+                      {getRiskLevelText(item.riskLevel)}
                     </div>
                   </div>
-                ))
-              )}
-            </div>
+                  <div className="divider"></div>
+                  <div className="card-footer">
+                    <div className="analysis-date">{item.date}</div>
+                    <div className="card-actions">
+                      <ShareAltOutlined className="action-icon" />
+                      <EyeOutlined className="action-icon" />
+                    </div>
+                  </div>
+                </div>
+              ))
+            )}
           </div>
-        )}
+        </div>
       </div>
     </div>
   )

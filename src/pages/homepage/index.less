@@ -77,19 +77,10 @@ html {
 
 /* 搜索区域容器 - 关键修复 */
 .search-container-area {
-  // position: relative;
-  // display: flex;
-  // justify-content: center;
   margin-bottom: 1rem;
   z-index: 10; /* 确保搜索区域有适当的 z-index */
-}
-
-// 欢迎语区域
-.welcome-section {
-  margin-top: 80px;
-  position: relative;
-  z-index: 1;
-  /* 添加右上方背景图片容器 */
+  transition: all 0.3s ease-in-out;
+  margin-top: 70px;
 }
 
 .greeting-primary {
@@ -181,7 +172,7 @@ html {
   padding-top: 0.75rem;
   padding-bottom: 0.75rem;
   border-radius: 9999px;
-  margin-bottom: 2rem;
+  margin-bottom: 40px;
   display: flex;
   align-items: center;
   justify-content: center;
@@ -372,26 +363,6 @@ html {
   border-color: #d9d9d9;
 }
 
-/* 调整分析按钮位置 */
-.analysis-button {
-  margin-top: 20px;
-  width: 100%;
-  background: linear-gradient(90deg, #27caff 0%, #367cff 50.5%, #2eb9ff 100%);
-  color: #ffffff;
-  font-weight: 500;
-  padding-top: 0.75rem;
-  padding-bottom: 0.75rem;
-  border-radius: 9999px;
-  margin-bottom: 1rem; /* 减少底部间距 */
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  box-shadow: 0px 0px 8px 0px rgba(255, 255, 255, 0.59) inset;
-  border: none;
-  cursor: pointer;
-  transition: all 0.3s ease;
-}
-
 .action-icon {
   color: rgba(102, 102, 102, 1);
   // font-size: 0.875rem;
@@ -414,3 +385,160 @@ html {
 .risk-level.text-gray-500 {
   color: #8c8c8c;
 }
+
+/* ===== 动画样式 ===== */
+
+/* 渐入动画 */
+.fade-in {
+  animation: fadeIn 0.3s ease-in-out forwards;
+  display: block;
+}
+
+/* 渐出动画 */
+.fade-out {
+  animation: fadeOut 0.3s ease-in-out forwards;
+  display: block;
+}
+
+// .welcome-section.fade-out {
+//   margin-top: 0;
+//   opacity: 0;
+//   height: 0;
+//   overflow: hidden;
+// }
+
+/* 渐入关键帧 */
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+    transform: translateY(10px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+/* 渐出关键帧 */
+@keyframes fadeOut {
+  from {
+    opacity: 1;
+    transform: translateY(0);
+  }
+  to {
+    opacity: 0;
+    transform: translateY(-10px);
+    display: none !important;
+  }
+}
+
+.search-bar-moved {
+  margin-top: -90px; /* 根据实际需要调整向上移动的距离 */
+  transition: all 0.3s ease-in-out;
+}
+
+/* 欢迎区域动画 */
+.welcome-section {
+  // margin-top: 80px;
+  position: relative;
+  z-index: 1;
+  transition: all 0.3s ease-in-out;
+}
+
+.welcome-section.fade-in {
+  margin-top: 40px;
+  opacity: 1;
+  height: auto;
+}
+
+/* 最近分析区域动画 */
+.recent-analysis {
+  margin-bottom: 4rem;
+  transition: all 0.3s ease-in-out;
+}
+
+.recent-analysis.fade-out {
+  opacity: 0;
+  height: 0;
+  overflow: hidden;
+  margin-bottom: 0;
+}
+
+.recent-analysis.fade-in {
+  opacity: 1;
+  height: auto;
+  margin-bottom: 4rem;
+}
+
+/* 历史搜索区域动画 */
+.search-history-section {
+  margin-top: 1rem;
+  margin-bottom: 2rem;
+  transition: all 0.3s ease-in-out;
+}
+
+.search-history-section.fade-out {
+  opacity: 0;
+  height: 0;
+  overflow: hidden;
+  margin-top: 0;
+  margin-bottom: 0;
+}
+
+.search-history-section.fade-in {
+  opacity: 1;
+  height: auto;
+  margin-top: 1rem;
+  margin-bottom: 2rem;
+}
+
+/* 分析按钮动画 */
+.analysis-button {
+  transition: all 0.3s ease-in-out;
+}
+
+/* 确保动画元素有正确的初始状态 */
+.welcome-section,
+.recent-analysis,
+.search-history-section {
+  opacity: 1;
+  transform: translateY(0);
+}
+
+/* 在动画期间禁用指针事件 */
+.welcome-section.fade-out,
+.recent-analysis.fade-out,
+.search-history-section.fade-out {
+  pointer-events: none;
+}
+
+/* 页面进入动画 */
+.home-container {
+  animation: pageEnter 0.5s ease-out;
+}
+
+@keyframes pageEnter {
+  from {
+    opacity: 0;
+    transform: translateY(20px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+// /* 响应式动画调整 */
+// @media (max-width: 768px) {
+//   .search-bar-moved {
+//     margin-top: -40px; /* 在移动端调整较小的移动距离 */
+//   }
+
+//   .welcome-section.fade-out {
+//     margin-top: 0;
+//   }
+
+//   .welcome-section.fade-in {
+//     margin-top: 60px;
+//   }
+// }

@@ -2,17 +2,42 @@
 .search-wrapper {
   position: relative;
   margin-top: 30px;
+  transition: all 0.3s ease-in-out;
 }
 
 .search-container {
   position: relative;
   display: flex;
   align-items: center;
-  background: linear-gradient(350deg, rgba(2, 91, 255, 0.6) 7.6%, rgba(0, 175, 239, 0.12) 27.6%);
   padding: 6px;
   border-radius: 12px;
-  transition: all 0.3s ease;
+  transition: all 0.1s ease-in-out;
   width: 100%;
+  overflow: hidden;
+
+  &::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background: linear-gradient(350deg, rgba(2, 91, 255, 0.6) 7.6%, rgba(0, 175, 239, 0.12) 27.6%);
+    border-radius: 12px;
+    transition: transform 0.1s ease-in-out;
+    z-index: -1;
+    transform: scaleX(1);
+    transform-origin: left center; // 从左向右消失
+  }
+}
+
+.search-container.search-focused {
+  margin-left: 0;
+  padding-right: 50px;
+
+  &::before {
+    transform: scaleX(0);
+  }
 }
 
 .search-input {
@@ -21,22 +46,54 @@
   padding: 10px 20px;
   background-color: #ffffff;
   border: none;
-  border-radius: 10px;
+  border-radius: 8px;
   font-weight: 400;
-  font-size: 16px;
+  font-size: 14px;
   font-family: PingFang SC;
   outline: none;
   box-sizing: border-box;
   flex: 1;
+  transition: all 0.3s ease-in-out;
 }
 
 /* 无边框无背景的搜索建议样式 */
 .suggestions-container {
+  animation: slideDownFadeIn 0.2s ease-out forwards;
+}
+
+/* 取消按钮样式 */
+.cancel-button {
   position: absolute;
-  top: calc(100% + 4px);
-  left: 0;
-  right: 0;
-  z-index: 9999;
+  right: 0px;
+  background: none;
+  border: none;
+  font-size: 16px;
+  color: #1890ff;
+  cursor: pointer;
+  padding: 8px 12px;
+  border-radius: 6px;
+  transition: all 0.2s ease;
+  white-space: nowrap;
+  font-family: PingFang SC;
+  font-weight: 400;
+  z-index: 2;
+}
+
+@keyframes slideDownFadeIn {
+  from {
+    opacity: 0;
+    transform: translateY(-8px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+/* 搜索容器聚焦时的动画 */
+.search-container:focus-within {
+  transform: scale(1.02);
+  transition: transform 0.2s ease;
 }
 
 .suggestions-list {
@@ -91,7 +148,7 @@
 
 .clear-button {
   position: absolute;
-  right: 20px;
+  right: 60px;
   background: none;
   border: none;
   font-size: 18px;
@@ -105,11 +162,13 @@
   border-radius: 50%;
   transition: background-color 0.2s;
   z-index: 1;
+  transition: all 0.2s ease;
 }
 
-// .clear-button:hover {
-//   background-color: #f5f5f5;
-// }
+/* 加载指示器在聚焦状态下的位置调整 */
+.search-container.search-focused .loading-indicator {
+  right: 70px; /* 避免与取消按钮重叠 */
+}
 
 .loading-indicator {
   position: absolute;

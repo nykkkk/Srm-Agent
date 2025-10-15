@@ -10,3 +10,29 @@ export const C_THINK = 'thinkCard'
 export const C_HTML = 'htmlCard'
 export const C_LOADING = 'chatLoading'
 export const C_FILE = 'fileCard'
+
+export const getRiskLevelColor = (level: string) => {
+  switch (level) {
+    case 'high':
+      return 'text-red-500'
+    case 'medium':
+      return 'text-orange-500'
+    case 'low':
+      return 'text-green-500'
+    default:
+      return 'text-gray-500'
+  }
+}
+
+export const getRiskLevelText = (level: string) => {
+  switch (level) {
+    case 'high':
+      return '高风险'
+    case 'medium':
+      return '中风险'
+    case 'low':
+      return '低风险'
+    default:
+      return '未知风险'
+  }
+}
