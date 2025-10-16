@@ -9,6 +9,7 @@ import { getRecentAnalysis } from '@/services'
 import { C_FILE } from '@/constant'
 import SearchInputWithDropdown from '@/components/Search'
 import { getRiskLevelText, getRiskLevelColor } from '@/constant'
+import AnalysisLogo from '@/assets/analysisLogo.png'
 
 const Home: FC = () => {
   const textareaRef = useRef<any>(null)
@@ -25,6 +26,7 @@ const Home: FC = () => {
   const [isInputFocused, setIsInputFocused] = useState(false)
   const [hasSearchResults, setHasSearchResults] = useState(false)
   const [isFromHistory, setIsFromHistory] = useState(false)
+  const [isFromSuggestion, setIsFromSuggestion] = useState(false)
   const disabled = loading
   const inputValue = useStore((s) => s.inputValue)
   const fileList = useStore((s) => s.fileList)
@@ -44,8 +46,11 @@ const Home: FC = () => {
 
   const chatProRef = useChatPro()
 
+  // 判断是否允许分析：只有当输入框的数据是从suggestion选择或历史搜索中点击的才可以点击
+  const canAnalyze = isFromHistory || isFromSuggestion
+
   const onSend = (v = undefined) => {
-    if (disabled) return null
+    if (disabled || !canAnalyze) return null
 
     const message = v ?? (inputValue || '')
     console.log('send message', message)
@@ -81,6 +86,9 @@ const Home: FC = () => {
       textareaRef.current?.blur()
       useStore.getState().setFileList([])
       useStore.getState().setShowUpload(false)
+      // 重置状态
+      setIsFromHistory(false)
+      setIsFromSuggestion(false)
     }, 20)
   }
 
@@ -109,6 +117,7 @@ const Home: FC = () => {
   // 处理搜索历史点击
   const handleHistoryClick = (companyName: string) => {
     setIsFromHistory(true)
+    setIsFromSuggestion(false) // 确保只设置一个来源
     isSelectingRef.current = true
     useStore.getState().setInputValue(companyName)
     setHasSearchResults(false)
@@ -128,6 +137,8 @@ const Home: FC = () => {
     setIsInputFocused(false)
     setHasSearchResults(false)
     setIsFromHistory(false)
+    setIsFromSuggestion(false)
+    console.log('返回初始状态', isFromHistory, isFromSuggestion)
 
     // 动画：隐藏搜索历史，显示欢迎区域和最近分析，搜索栏回到原位置
     setShowSearchHistory(false)
@@ -143,6 +154,7 @@ const Home: FC = () => {
     console.log('输入框获得焦点')
     setIsInputFocused(true)
     setIsFromHistory(false)
+    setIsFromSuggestion(false)
 
     // 清除之前的 blur timeout
     if (blurTimeoutRef.current) {
@@ -184,6 +196,8 @@ const Home: FC = () => {
   const handleClearSearch = () => {
     console.log('处理清空搜索')
     isSelectingRef.current = true
+    setIsFromHistory(false)
+    setIsFromSuggestion(false)
 
     if (blurTimeoutRef.current) {
       clearTimeout(blurTimeoutRef.current)
@@ -206,8 +220,9 @@ const Home: FC = () => {
   const handleSelectSupplier = (supplier: any) => {
     console.log('选择供应商:', supplier)
     isSelectingRef.current = true
-    setHasSearchResults(false)
+    setIsFromSuggestion(true)
     setIsFromHistory(false)
+    setHasSearchResults(false)
 
     if (blurTimeoutRef.current) {
       clearTimeout(blurTimeoutRef.current)
@@ -258,18 +273,26 @@ const Home: FC = () => {
             onSearch={(query) => {
               console.log('搜索关键词:', query)
               setIsFromHistory(false)
+              setIsFromSuggestion(false)
             }}
             onSearchResultsShow={handleSearchResultsShow}
             isInputFocused={isInputFocused}
             setIsInputFocused={setIsInputFocused}
             isFromHistory={isFromHistory}
+            isFromSuggestion={isFromSuggestion}
+            setIsFromHistory={setIsFromHistory}
+            setIsFromSuggestion={setIsFromSuggestion}
           />
         </div>
 
         {/* 开始分析按钮 */}
         {(!hasSearchResults || isFromHistory) && (
-          <button onClick={() => onSend()} className="analysis-button">
-            <RightOutlined className="button-icon" />
+          <button
+            onClick={() => onSend()}
+            className={`analysis-button ${!canAnalyze ? 'analysis-button-disabled' : ''}`}
+            disabled={!canAnalyze}
+          >
+            <img src={AnalysisLogo} alt="分析图标" className="button-icon" />
             <div className="button-text">开始分析</div>
           </button>
         )}

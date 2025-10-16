@@ -19,6 +19,9 @@ interface SearchInputWithDropdownProps {
   isInputFocused?: boolean
   setIsInputFocused?: (focused: boolean) => void
   isFromHistory?: boolean
+  isFromSuggestion?: boolean
+  setIsFromHistory?: (fromHistory: boolean) => void
+  setIsFromSuggestion?: (fromSuggestion: boolean) => void
 }
 
 const SearchInputWithDropdown: React.FC<SearchInputWithDropdownProps> = ({
@@ -31,6 +34,9 @@ const SearchInputWithDropdown: React.FC<SearchInputWithDropdownProps> = ({
   isInputFocused,
   setIsInputFocused,
   isFromHistory,
+  isFromSuggestion,
+  setIsFromHistory,
+  setIsFromSuggestion,
 }) => {
   const inputValue = useStore((s) => s.inputValue)
   const setInputValue = (value: string) => useStore.getState().setInputValue(value)
@@ -175,6 +181,8 @@ const SearchInputWithDropdown: React.FC<SearchInputWithDropdownProps> = ({
     setSuggestions([])
     setShowDropdown(false)
     onSearchResultsShow?.(false)
+    setIsFromHistory?.(false)
+    setIsFromSuggestion?.(false)
 
     // 保持输入框焦点
     setTimeout(() => {
@@ -237,6 +245,19 @@ const SearchInputWithDropdown: React.FC<SearchInputWithDropdownProps> = ({
   return (
     <div className="search-wrapper" ref={dropdownRef}>
       <div className={`search-container ${shouldShowFocusedStyle ? 'search-focused' : ''}`}>
+        {shouldShowFocusedStyle && (
+          <div className="search-icon">
+            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+              <path
+                d="M21 21L16.514 16.506L21 21ZM19 10.5C19 15.194 15.194 19 10.5 19C5.806 19 2 15.194 2 10.5C2 5.806 5.806 2 10.5 2C15.194 2 19 5.806 19 10.5Z"
+                stroke="#1890ff"
+                strokeWidth="2"
+                strokeLinecap="round"
+                strokeLinejoin="round"
+              />
+            </svg>
+          </div>
+        )}
         <input
           ref={inputRef}
           type="text"
@@ -245,7 +266,7 @@ const SearchInputWithDropdown: React.FC<SearchInputWithDropdownProps> = ({
           onFocus={handleFocus}
           onBlur={handleBlur}
           placeholder="请输入供应商名称/企业信用代码"
-          className="search-input"
+          className={`search-input ${shouldShowFocusedStyle ? 'with-search-icon' : ''}`}
         />
 
         {/* 清空按钮 - 只在有输入值时显示，不区分焦点状态 */}

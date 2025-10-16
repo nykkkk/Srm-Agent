@@ -66,9 +66,6 @@ html {
   border-radius: 50%;
   transition: background-color 0.2s;
 }
-.back-arrow:hover {
-  background-color: rgba(0, 0, 0, 0.05);
-}
 
 .main-content {
   position: relative;
@@ -180,6 +177,13 @@ html {
   border: none;
   cursor: pointer;
   transition: all 0.3s ease;
+}
+
+// 禁用状态的开始分析按钮
+.analysis-button-disabled {
+  background: linear-gradient(90deg, #cccccc 0%, #999999 50.5%, #b3b3b3 100%) !important;
+  cursor: not-allowed !important;
+  opacity: 0.6;
 }
 
 .button-icon {
@@ -319,12 +323,6 @@ html {
   gap: 1rem;
 }
 
-/* 历史搜索样式 */
-.search-history-section {
-  margin-top: 1rem;
-  margin-bottom: 2rem;
-}
-
 .history-title {
   color: rgba(102, 102, 102, 1);
   font-family: PingFang SC;
@@ -345,7 +343,7 @@ html {
 .history-tag {
   background-color: #ffffff;
   border: 1px solid #f0f0f0;
-  border-radius: 6px;
+  border-radius: 2px;
   padding: 0.5rem 0.75rem;
   font-family: PingFang SC;
   font-weight: 400;
@@ -356,11 +354,6 @@ html {
   cursor: pointer;
   transition: all 0.2s ease;
   box-shadow: 0 1px 2px rgba(0, 0, 0, 0.05);
-}
-
-.history-tag:hover {
-  background-color: #f8f9fa;
-  border-color: #d9d9d9;
 }
 
 .action-icon {

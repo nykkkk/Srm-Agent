@@ -5,6 +5,23 @@
   transition: all 0.3s ease-in-out;
 }
 
+/* 放大镜图标样式 */
+.search-icon {
+  position: absolute;
+  left: 14px;
+  top: 50%;
+  transform: translateY(-50%);
+  z-index: 2;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+/* 有放大镜图标时的输入框内边距 */
+.search-input.with-search-icon {
+  padding-left: 30px; /* 为放大镜图标留出空间 */
+}
+
 .search-container {
   position: relative;
   display: flex;
@@ -54,6 +71,11 @@
   box-sizing: border-box;
   flex: 1;
   transition: all 0.3s ease-in-out;
+  /* 修改placeholder颜色 */
+  &::placeholder {
+    color: #999999; /* 浅灰色 */
+    opacity: 1; /* 确保在Firefox中颜色正确显示 */
+  }
 }
 
 /* 无边框无背景的搜索建议样式 */
