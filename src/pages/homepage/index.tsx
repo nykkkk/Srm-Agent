@@ -5,7 +5,7 @@ import { ArrowLeftOutlined, ShareAltOutlined, EyeOutlined, RightOutlined, ArrowR
 import { BaseMessage, ChatMessage, useChatPro } from '@kdcloudjs/kdesign-chatui'
 import './index.less'
 import { useStore } from '@/store'
-import { getRecentAnalysis } from '@/services'
+import { getHistory, getRecentAnalysis } from '@/services'
 import { C_FILE } from '@/constant'
 import SearchInputWithDropdown from '@/components/Search'
 import { getRiskLevelText, getRiskLevelColor } from '@/constant'
@@ -16,13 +16,7 @@ const Home: FC = () => {
   const [recentAnalysis, setRecentAnalysis] = useState<any[]>([])
   const [loading, setLoading] = useState(false)
   // Mock 历史搜索数据
-  const [searchHistory, setSearchHistory] = useState<string[]>([
-    '深圳德胜电子科技有限公司',
-    '华为技术有限公司',
-    '腾讯科技',
-    '阿里巴巴集团',
-    '字节跳动',
-  ])
+  const [searchHistory, setSearchHistory] = useState<string[]>([])
   const [isInputFocused, setIsInputFocused] = useState(false)
   const [hasSearchResults, setHasSearchResults] = useState(false)
   const [isFromHistory, setIsFromHistory] = useState(false)
@@ -60,11 +54,11 @@ const Home: FC = () => {
       return
     }
 
-    // 添加到搜索历史
-    if (message && !searchHistory.includes(message)) {
-      const newHistory = [message, ...searchHistory.slice(0, 4)]
-      setSearchHistory(newHistory)
-    }
+    // // 添加到搜索历史
+    // if (message && !searchHistory.includes(message)) {
+    //   const newHistory = [message, ...searchHistory.slice(0, 4)]
+    //   setSearchHistory(newHistory)
+    // }
 
     const temp: BaseMessage = [{ type: 'user', msg: [] }]
     if (message) {
@@ -103,6 +97,20 @@ const Home: FC = () => {
           setRecentAnalysis(res)
         } else {
           console.log('获取数据失败，使用默认数据')
+        }
+      } catch (error) {
+        console.error('获取最近分析数据失败:', error)
+      } finally {
+        setLoading(false)
+      }
+
+      try {
+        const res = await getHistory()
+        console.log('获取历史搜搜数据成功:', res)
+        if (res && Array.isArray(res)) {
+          setSearchHistory(res)
+        } else {
+          console.log('获取数据失败，使用默认数据（没有）')
         }
       } catch (error) {
         console.error('获取最近分析数据失败:', error)
@@ -262,7 +270,6 @@ const Home: FC = () => {
           <div className="greeting-secondary">用户名</div>
           {/* <div className="greeting-description">敏捷赋能采购问题从洞见到解决</div> */}
         </div>
-
         {/* 搜索区域 - 带移动动画 */}
         <div className={`search-container-area ${isSearchBarMoved ? 'search-bar-moved' : ''}`}>
           <SearchInputWithDropdown
@@ -284,18 +291,18 @@ const Home: FC = () => {
             setIsFromSuggestion={setIsFromSuggestion}
           />
         </div>
-
         {/* 开始分析按钮 */}
-        {(!hasSearchResults || isFromHistory) && (
-          <button
-            onClick={() => onSend()}
-            className={`analysis-button ${!canAnalyze ? 'analysis-button-disabled' : ''}`}
-            disabled={!canAnalyze}
-          >
-            <img src={AnalysisLogo} alt="分析图标" className="button-icon" />
-            <div className="button-text">开始分析</div>
-          </button>
-        )}
+        {/* 此代码用于控制“开始分析”按钮的显示逻辑。 
+        当没有搜索结果，或者输入数据是从历史搜索中点击获取时，显示“开始分析”按钮。 */}
+
+        <button
+          onClick={() => onSend()}
+          className={`analysis-button ${!canAnalyze ? 'analysis-button-disabled' : ''}`}
+          // disabled={!canAnalyze}
+        >
+          <img src={AnalysisLogo} alt="分析图标" className="button-icon" />
+          <div className="button-text">开始分析</div>
+        </button>
 
         {/* 历史搜索 - 带渐入渐出动画 */}
         <div className={`search-history-section ${showSearchHistory ? 'fade-in' : 'fade-out'}`}>
@@ -315,7 +322,6 @@ const Home: FC = () => {
             ))}
           </div>
         </div>
-
         {/* 最近分析 - 带渐入渐出动画 */}
         <div className={`recent-analysis ${showRecentAnalysis ? 'fade-in' : 'fade-out'}`}>
           <div className="section-header">

@@ -15,3 +15,7 @@ export const getSuppliers = (inputValue: string) => {
 export const getWsUrl = () => {
   return request('/mock/initWebsocketUrl')
 }
+
+export const getHistory = () => {
+  return request('/mock/history')
+}

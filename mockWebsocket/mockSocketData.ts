@@ -407,6 +407,8 @@ export const mockSuppliers: Supplier[] = [
   { id: '7', companyName: '字节跳动', creditCode: '91110105MA7BQYQY0F' },
 ]
 
+export const mockHistory = ['深圳德胜电子科技有限公司', '华为技术有限公司', '腾讯科技', '阿里巴巴集团', '字节跳动']
+
 export const mockWsUrl = [
   {
     code: 200,

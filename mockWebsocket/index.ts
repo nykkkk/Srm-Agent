@@ -16,7 +16,7 @@ const handlers = [
       if (event.data !== 'ping') {
         for (const { message } of mockThinkCard) {
           /* eslint-disable-next-line no-await-in-loop */
-          await sleep(100)
+          await sleep(1000)
           client.send(JSON.stringify({ status: C_THINK, message }))
         }
 

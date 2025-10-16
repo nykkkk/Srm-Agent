@@ -136,7 +136,9 @@ const ThinkCard = (props: ThinkProps) => {
           {/* 思考过程标题 - 控制展开收起 */}
           <div className={classNames(`${prefix}-header`)} onClick={() => onClick()}>
             <img className={classNames(`${prefix}-header-svg`)} src={light} alt="" />
-            <div className={classNames(`${prefix}-header-title`)}>思考过程</div>
+            <div className={classNames(`${prefix}-header-title`)}>
+              {!isComplete && !isStop ? '思考过程' : '思考完成'}
+            </div>
             <div className={classNames(`${prefix}-header-icon`)}>
               <Icon type="arrow-right" className={classNames(`arrow-icon`, { down: state.showMain })} />
             </div>
@@ -223,7 +225,11 @@ const ThinkCard = (props: ThinkProps) => {
       <div className={classNames(`${prefix}-footer`)}>
         <div className={classNames(`${prefix}-title`)}>
           <div className={classNames(`${prefix}-title-logo`)}>
-            <div className={classNames(`${prefix}-title-logo-write`)}>
+            <div
+              className={classNames(`${prefix}-title-logo-write`, {
+                completed: isComplete || isStop, // 思考结束或停止时添加 completed 类
+              })}
+            >
               <img src={write} alt="" />
             </div>
             {/* {!isComplete && !isStop && <div className={classNames(`${prefix}-title-logo-loading`)} />} */}

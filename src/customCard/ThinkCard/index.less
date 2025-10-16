@@ -237,6 +237,18 @@
           z-index: 0;
         }
 
+        // 静态蓝色边框（思考结束或停止时）
+        &.completed::before {
+          background: conic-gradient(
+            rgba(2, 91, 255, 0.8) 0deg,
+            rgba(2, 91, 255, 0.8) 90deg,
+            rgba(2, 91, 255, 0.8) 180deg,
+            rgba(2, 91, 255, 0.8) 270deg,
+            rgba(2, 91, 255, 0.8) 360deg
+          );
+          animation: none; // 停止动画
+        }
+
         // 内层遮罩，只显示边框部分
         &::after {
           content: '';

@@ -1,4 +1,4 @@
-import { recentAnalysis, mockSuppliers, mockWsUrl } from '../mockWebsocket/mockSocketData'
+import { recentAnalysis, mockSuppliers, mockWsUrl, mockHistory } from '../mockWebsocket/mockSocketData'
 export default {
   '/mock/data': [
     { id: 1, name: 'foo' },
@@ -6,6 +6,7 @@ export default {
   ],
   '/mock/recentAnalysis': recentAnalysis,
   '/mock/initWebsocketUrl': mockWsUrl,
+  '/mock/history': mockHistory,
   'GET /api/suppliers/search': (req: any, res: any) => {
     const { q } = req.query // 获取查询参数
 

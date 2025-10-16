@@ -43,6 +43,7 @@ const SearchInputWithDropdown: React.FC<SearchInputWithDropdownProps> = ({
   const [suggestions, setSuggestions] = useState<Supplier[]>([])
   const [showDropdown, setShowDropdown] = useState(false)
   const [isLoading, setIsLoading] = useState(false)
+  const [hasNoResults, setHasNoResults] = useState(false) // 新增：无结果状态
   const isSelectingRef = useRef(false)
   const dropdownRef = useRef<HTMLDivElement>(null)
   const inputRef = useRef<HTMLInputElement>(null)
@@ -57,11 +58,21 @@ const SearchInputWithDropdown: React.FC<SearchInputWithDropdownProps> = ({
     }
   }, [isInputFocused])
 
+  // 监听输入值变化，当用户手动输入时重置来源状态
+  useEffect(() => {
+    // 如果输入值变化且不是来自选择操作，则重置来源状态
+    if (inputValue && !isSelectingRef.current) {
+      setIsFromHistory?.(false)
+      setIsFromSuggestion?.(false)
+    }
+  }, [inputValue, setIsFromHistory, setIsFromSuggestion])
+
   // 搜索逻辑
   useEffect(() => {
     if (isFromHistory) {
       setSuggestions([])
       setShowDropdown(false)
+      setHasNoResults(false)
       onSearchResultsShow?.(false)
       return
     }
@@ -75,25 +86,29 @@ const SearchInputWithDropdown: React.FC<SearchInputWithDropdownProps> = ({
       if (!inputValue.trim()) {
         setSuggestions([])
         setShowDropdown(false)
+        setHasNoResults(false)
         onSearchResultsShow?.(false)
         return
       }
 
       setIsLoading(true)
+      setHasNoResults(false) // 重置无结果状态
 
       try {
         const filteredSuppliers = await getSuppliers(inputValue)
 
         setSuggestions(filteredSuppliers)
         const hasResults = filteredSuppliers.length > 0
-        setShowDropdown(hasResults)
+        setShowDropdown(true) // 总是显示下拉框，即使没有结果
+        setHasNoResults(!hasResults) // 设置无结果状态
         onSearchResultsShow?.(hasResults)
 
         onSearch?.(inputValue)
       } catch (error) {
         console.error('搜索失败:', error)
         setSuggestions([])
-        setShowDropdown(false)
+        setShowDropdown(true) // 错误时也显示下拉框
+        setHasNoResults(true) // 显示错误提示
         onSearchResultsShow?.(false)
       } finally {
         setIsLoading(false)
@@ -109,6 +124,7 @@ const SearchInputWithDropdown: React.FC<SearchInputWithDropdownProps> = ({
     const handleClickOutside = (event: MouseEvent) => {
       if (dropdownRef.current && !dropdownRef.current.contains(event.target as Node)) {
         setShowDropdown(false)
+        setHasNoResults(false)
         onSearchResultsShow?.(false)
       }
     }
@@ -128,7 +144,12 @@ const SearchInputWithDropdown: React.FC<SearchInputWithDropdownProps> = ({
     setInputValue(supplier.companyName)
     setShowDropdown(false)
     setSuggestions([])
+    setHasNoResults(false)
     onSearchResultsShow?.(false)
+
+    // 设置来源状态
+    setIsFromSuggestion?.(true)
+    setIsFromHistory?.(false)
 
     // 立即设置焦点状态，确保样式正确
     setInternalIsFocused(true)
@@ -180,6 +201,7 @@ const SearchInputWithDropdown: React.FC<SearchInputWithDropdownProps> = ({
     setInputValue('')
     setSuggestions([])
     setShowDropdown(false)
+    setHasNoResults(false)
     onSearchResultsShow?.(false)
     setIsFromHistory?.(false)
     setIsFromSuggestion?.(false)
@@ -188,6 +210,18 @@ const SearchInputWithDropdown: React.FC<SearchInputWithDropdownProps> = ({
     setTimeout(() => {
       inputRef.current?.focus()
     }, 10)
+  }
+
+  // 处理输入变化
+  const handleInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const value = e.target.value
+    setInputValue(value)
+
+    // 如果用户手动输入（删除或添加字符），重置来源状态
+    if (!isSelectingRef.current) {
+      setIsFromHistory?.(false)
+      setIsFromSuggestion?.(false)
+    }
   }
 
   // 处理输入框焦点
@@ -262,7 +296,7 @@ const SearchInputWithDropdown: React.FC<SearchInputWithDropdownProps> = ({
           ref={inputRef}
           type="text"
           value={inputValue}
-          onChange={(e) => setInputValue(e.target.value)}
+          onChange={handleInputChange}
           onFocus={handleFocus}
           onBlur={handleBlur}
           placeholder="请输入供应商名称/企业信用代码"
@@ -305,24 +339,37 @@ const SearchInputWithDropdown: React.FC<SearchInputWithDropdownProps> = ({
       </div>
 
       {/* 下拉建议框 */}
-      {showDropdown && shouldShowFocusedStyle && !isFromHistory && (
+      {showDropdown && shouldShowFocusedStyle && (
         <div className="suggestions-container">
           <div className="suggestions-list">
-            {suggestions.map((supplier) => (
-              <div
-                key={supplier.id}
-                className="suggestion-item"
-                onMouseDown={(e) => {
-                  e.preventDefault()
-                  handleSelectSupplier(supplier)
-                }}
-              >
-                <div className="supplier-info">
-                  <div className="company-name">{highlightText(supplier.companyName, inputValue)}</div>
-                  <div className="credit-code">{highlightText(supplier.creditCode, inputValue)}</div>
-                </div>
+            {isLoading ? (
+              // 加载中状态
+              <div className="suggestion-empty">
+                <div className="loading-text">搜索中...</div>
               </div>
-            ))}
+            ) : hasNoResults ? (
+              // 无结果状态
+              <div className="suggestion-empty">
+                <div className="empty-text">暂未搜索到供应商</div>
+              </div>
+            ) : (
+              // 有结果状态
+              suggestions.map((supplier) => (
+                <div
+                  key={supplier.id}
+                  className="suggestion-item"
+                  onMouseDown={(e) => {
+                    e.preventDefault()
+                    handleSelectSupplier(supplier)
+                  }}
+                >
+                  <div className="supplier-info">
+                    <div className="company-name">{highlightText(supplier.companyName, inputValue)}</div>
+                    <div className="credit-code">{highlightText(supplier.creditCode, inputValue)}</div>
+                  </div>
+                </div>
+              ))
+            )}
           </div>
         </div>
       )}
