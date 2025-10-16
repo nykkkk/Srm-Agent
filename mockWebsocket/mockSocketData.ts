@@ -791,15 +791,15 @@ export const mockThinkCardStream = [
   { message: { id: 'risk-bottom-1', type: 'bottom', status: 'append', content: '求', process: 50 } },
   { message: { id: 'risk-bottom-1', type: 'bottom', status: 'append', content: '变', process: 50 } },
   { message: { id: 'risk-bottom-1', type: 'bottom', status: 'append', content: '更', process: 100 } },
-  {
-    message: {
-      type: 'top',
-      status: 'edit',
-      title: '多Agents协作中...',
-      agentNumber: [4, 4],
-      process: 100,
-    },
-  },
+  //   {
+  //     message: {
+  //       type: 'top',
+  //       status: 'edit',
+  //       title: '多Agents协作中...',
+  //       agentNumber: [4, 4],
+  //       process: 100,
+  //     },
+  //   },
 ]
 
 import { Supplier } from '@/components/Search'

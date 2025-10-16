@@ -29,6 +29,41 @@ thinkComponentDeepseekRegistry()
 
 const prefix = 'app'
 
+const TopNavigation = () => {
+  const hasChat = useStore((s) => s.hasChat)
+  const chatProRef = useChatPro()
+
+  const handleBack = () => {
+    // 重置聊天状态
+    chatProRef.resetMessage([])
+    useStore.getState().setHasChat(false)
+    // 如果有其他需要重置的状态，可以在这里添加
+    // 例如：useStore.getState().setSomeState(initialValue)
+  }
+
+  return (
+    <div className="top-navigation">
+      <div className="navigation-content">
+        {/* 在分析阶段显示返回按钮 */}
+        {hasChat && (
+          <div className="navigation-back" onClick={handleBack}>
+            <svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+              <path
+                d="M15 18L9 12L15 6"
+                stroke="#000000"
+                strokeWidth="2"
+                strokeLinecap="round"
+                strokeLinejoin="round"
+              />
+            </svg>
+          </div>
+        )}
+        <div className="navigation-title">采购智能风控智能体</div>
+      </div>
+    </div>
+  )
+}
+
 const App = () => {
   const chatProRef = useChatPro()
 
@@ -139,6 +174,7 @@ const App = () => {
       })}
       style={{ height: '100vh' }}
     >
+      <TopNavigation />
       <ChatPro
         mode="mobile"
         chatsBeginTop

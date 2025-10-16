@@ -25,10 +25,10 @@ const handlers = [
         //   client.send(JSON.stringify({ status: C_THINK, message }))
         // }
         // send({ message: 'start', status: 'start' })
-        // send({
-        //   status: C_HTML,
-        //   message: mockHtml1,
-        // })
+        send({
+          status: C_HTML,
+          message: mockHtml1,
+        })
         // for (let i = 0; i < 5; i++) {
         //   send({ message: '12347', status: 'append' })
         // }

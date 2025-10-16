@@ -253,11 +253,11 @@ const Home: FC = () => {
   const home = (
     <div className="home-container">
       {/* 顶部导航 */}
-      <div className="top-navigation">
+      {/* <div className="top-navigation">
         <div className="navigation-content">
           <div className="navigation-title">采购智能风控智能体</div>
         </div>
-      </div>
+      </div> */}
 
       {/* 右上方背景图片 */}
       <div className="top-right-background"></div>
