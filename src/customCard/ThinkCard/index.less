@@ -7,8 +7,11 @@
 .custom-card-think-card {
   position: relative;
   border-radius: 8px;
-  margin: -12px -16px;
+  margin: -12px -16px 8px -16px;
   position: relative;
+  display: flex;
+  flex-direction: column;
+  // height: 100vh;
 
   & + div.kdcui-chat-card-content-footer {
     margin-top: 0px !important;
@@ -23,9 +26,143 @@
   }
 
   &-container {
-    background-image: linear-gradient(180deg, #ffffff 31%, #ffffff 100%);
+    // background-image: linear-gradient(180deg, #ffffff 31%, #ffffff 100%);
+    background-color: transparent;
     width: calc(100vw - 32px);
     border-radius: 8px;
+
+    &.show {
+      background: rgba(255, 255, 255, 0.6);
+    }
+  }
+
+  &-header-container {
+    padding: 0 16px 0 16px;
+    border-radius: 8px;
+    &-content {
+      display: none; // 默认隐藏
+      font-family: PingFang SC;
+      font-weight: 400;
+      font-style: Regular;
+      font-size: 14px;
+      line-height: 22px;
+      letter-spacing: 0px;
+      // padding-bottom: 10px; /* 为底部固定区域留出空间 */
+      color: rgba(102, 102, 102, 1);
+
+      &.show {
+        display: block; // 展开时显示
+      }
+    }
+  }
+
+  &-preThink {
+    padding: 16px;
+    display: flex;
+    flex-direction: column;
+
+    &-svg {
+      width: 24px;
+      height: 24px;
+      margin-bottom: 8px;
+    }
+
+    &-process {
+      display: flex;
+      align-items: center;
+      line-height: 30px;
+      height: 30px;
+      gap: 8px;
+
+      // 确保图片和文字完美对齐
+      img {
+        vertical-align: middle;
+        margin-bottom: 1px; // 微调对齐
+      }
+    }
+
+    &-title {
+      font-family: PingFang SC;
+      font-weight: 600;
+      font-style: Semibold;
+      font-size: 18px;
+      line-height: 24px;
+      letter-spacing: 0px;
+      margin-top: 10px;
+      margin-bottom: 10px;
+    }
+
+    &-finish {
+      font-family: PingFang SC;
+      font-weight: 400;
+      font-style: Regular;
+      font-size: 14px;
+      line-height: 28px;
+      letter-spacing: 0%;
+      vertical-align: bottom;
+
+      // 使用伪元素或者通过特定类名来加粗
+      &-agent {
+        font-weight: 600;
+        font-style: Semibold;
+      }
+    }
+  }
+
+  &-header {
+    display: flex;
+    align-items: center;
+    // justify-content: space-between;
+    padding: 16px 0 4px 0;
+    // border-bottom: 1px solid #f0f0f0;
+    cursor: pointer;
+    // background: white;
+
+    &-title {
+      font-family: PingFang SC;
+      font-weight: 400;
+      font-style: Regular;
+      font-size: 14px;
+      line-height: 22px;
+      letter-spacing: 0px;
+      color: rgba(128, 125, 120, 1);
+    }
+
+    &-svg {
+      margin-right: 10px;
+      width: 16px;
+      height: 16px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      border-radius: 50%;
+    }
+
+    &-icon {
+      margin-left: 5px;
+      width: 14px;
+      height: 14px;
+      line-height: 14px;
+      color: rgba(142, 139, 134, 1);
+      .arrow-icon {
+        transition: transform 0.1s ease-in-out;
+
+        &.down {
+          transform: rotate(90deg);
+        }
+      }
+    }
+  }
+
+  /* 底部固定区域 */
+  &-footer {
+    position: fixed;
+    bottom: 20px;
+    left: 0;
+    right: 0;
+    z-index: 1000;
+    // background: white;
+    // box-shadow: 0 -2px 10px rgba(0, 0, 0, 0.1);
   }
 
   &-icon {
@@ -44,10 +181,12 @@
     align-items: center;
     align-items: center;
     padding: 0 16px;
-    height: 64px;
-    background-image: linear-gradient(180deg, #f0f2ff 0%, #ffffff 43%);
+    height: 50px;
+    // background-image: linear-gradient(180deg, #f0f2ff 0%, #ffffff 43%);
+    background: var(--white, rgba(255, 255, 255, 1));
     box-shadow: 0px 1px 30px 0px rgba(215, 232, 245, 1);
     border-radius: 8px;
+    margin: 8px 16px; /* 添加一些外边距 */
 
     &-logo {
       width: 46px;
@@ -58,15 +197,6 @@
       align-items: center;
       justify-content: center;
       flex-shrink: 0;
-
-      > div {
-        position: absolute;
-        inset: 0;
-        width: 100%;
-        height: 100%;
-        background-size: cover;
-        background-repeat: no-repeat;
-      }
 
       &-done {
         background-image: url('./img/11.svg');
@@ -81,12 +211,66 @@
         background-image: url('./img/33.svg');
       }
 
-      img {
-        width: 17px;
+      &-write {
+        width: 40px;
+        height: 40px;
+        border-radius: 10px;
+        transform: rotate(15deg) translateY(-15px);
+
+        position: relative;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        background: white;
+        overflow: hidden;
+
+        // 旋转的边框线容器
+        &::before {
+          content: '';
+          position: absolute;
+          // top: -50%;
+          // left: -50%;
+          width: 200%;
+          height: 200%;
+          background: conic-gradient(from 0deg, transparent, rgba(2, 91, 255, 0.8), transparent, transparent);
+          animation: borderRotate 1.5s linear infinite;
+          z-index: 0;
+        }
+
+        // 内层遮罩，只显示边框部分
+        &::after {
+          content: '';
+          position: absolute;
+          top: 1.5px;
+          left: 1.5px;
+          right: 1.5px;
+          bottom: 1.5px;
+          border-radius: 9px;
+          background: white;
+          z-index: 1;
+        }
+
+        img {
+          width: 24px;
+          height: 24px;
+          transform: rotate(-15deg);
+          position: relative;
+          z-index: 2; // 确保图片在最上层
+        }
+      }
+
+      @keyframes borderRotate {
+        0% {
+          transform: rotate(0deg);
+        }
+        100% {
+          transform: rotate(360deg);
+        }
       }
     }
 
     &-main {
+      // margin-left: 8px;
       flex: 1;
       overflow: hidden;
       font-size: 14px;
@@ -97,7 +281,7 @@
       width: 95%;
       display: flex;
       align-items: center;
-
+      margin-left: 15px;
       > div:nth-child(1) {
         overflow: hidden;
         text-overflow: ellipsis;
@@ -199,7 +383,7 @@
   &-bottom {
     &-item {
       margin: 0 12px 0 12px;
-      border: 1px solid transparent;
+      // border: 1px solid transparent;
       margin-bottom: 12px;
 
       img {
@@ -207,9 +391,9 @@
         height: 14px;
       }
 
-      &.show {
-        border: 1px solid rgba(243, 243, 243, 1);
-      }
+      // &.show {
+      //   // border: 1px solid rgba(243, 243, 243, 1);
+      // }
 
       &-title {
         display: flex;
@@ -220,9 +404,9 @@
         color: #000000;
         font-weight: 400;
 
-        &.show {
-          background: rgba(243, 243, 243, 0.7);
-        }
+        // &.show {
+        //   // background: rgba(243, 243, 243, 0.7);
+        // }
 
         .bottom-title {
           flex: 1;
@@ -240,6 +424,11 @@
       }
 
       &-content {
+        border-radius: 8px;
+        border-width: 1px;
+        opacity: 1;
+        border: 1px solid var(--slate-200, rgba(226, 232, 240, 1));
+
         display: none;
         padding: 12px;
         font-size: 14px;

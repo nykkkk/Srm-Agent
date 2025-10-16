@@ -87,7 +87,7 @@ const App = () => {
 
   const chatCardRender: ChatState['chatCardRender'] = (data, dom, isLast) => {
     if (data?.type === 'robot') {
-      return dom
+      return <div style={{ marginTop: 10 }}>{dom}</div>
     }
   }
 

@@ -37,10 +37,12 @@ export const AutoHeightIframe: React.FC<{ html: string }> = ({ html }) => {
       srcDoc={html}
       width="100%"
       height={height}
-      frameBorder="0"
       title="供应商风险详情"
       sandbox="allow-scripts allow-same-origin"
       style={{
+        marginTop: '10px',
+        width: 'calc(100% + 32px)',
+        margin: '0px -16px',
         minHeight: '400px',
         border: 'none',
         borderRadius: '8px',

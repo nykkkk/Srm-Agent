@@ -11,7 +11,10 @@ import awImg from './img/agentWait.svg'
 import oImg from './img/1.svg'
 import tImg from './img/2.svg'
 import think from './img/think.svg'
-
+import thinking from './img/Thinking.svg'
+import light from './img/Light.svg'
+import write from './img/write.svg'
+import generatingDoc from './img/GeneratingDoc.svg'
 import './index.less'
 
 import { C_THINK } from '@/constant'
@@ -82,6 +85,7 @@ const ThinkCard = (props: ThinkProps) => {
           if (!item) return
           item.show = !item.show
         } else {
+          // 控制思考卡片的展开与收起
           target.content.showMain = !target.content.showMain
         }
       })
@@ -101,26 +105,47 @@ const ThinkCard = (props: ThinkProps) => {
 
   return (
     <div className={classNames(prefix)}>
-      <div className={classNames(`${prefix}-container`)}>
-        <div className={classNames(`${prefix}-title`)} onClick={() => onClick()}>
-          <div className={classNames(`${prefix}-title-logo`)}>
-            {!isComplete && !isStop && <div className={classNames(`${prefix}-title-logo-loading`)} />}
-            <div className={classNames(`${prefix}-title-logo-star`)} />
-            {(isComplete || isStop) && <div className={classNames(`${prefix}-title-logo-done`)} />}
+      {/* {!isComplete && !isStop && (
+        <div className={classNames(`${prefix}-preThink`)}>
+          <img className={classNames(`${prefix}-preThink-svg`)} src={thinking} alt="" />
+          <div className={classNames(`${prefix}-preThink-process`)}>
+            正在生成 <img src={generatingDoc} alt="" />
           </div>
-          <div className={classNames(`${prefix}-title-main`)}>
-            <div>{state?.title}</div>
-            {!isComplete && !isStop && (
-              <div>
-                <span>（{state.agentNumber?.[0] || 0}</span>
-                <span>/{state.agentNumber?.[1] || 0}）</span>
-              </div>
-            )}
-          </div>
-          <div className={classNames(`${prefix}-icon`)}>
-            <Icon type="arrow-down" className={classNames(`arrow-icon`, { up: state.showMain })} />
+          <div className={classNames(`${prefix}-preThink-title`)}>深圳德胜电子科技有限公司供应商风险评估报告 </div>
+          <div className={classNames(`${prefix}-preThink-finish`)}>
+            好的，<span className={classNames(`${prefix}-preThink-finish-agent`)}>采购智能风控Agent</span>{' '}
+            已接收到您的任务
           </div>
         </div>
+      )} */}
+
+      <div className={classNames(`${prefix}-preThink`)}>
+        <img className={classNames(`${prefix}-preThink-svg`)} src={thinking} alt="" />
+        <div className={classNames(`${prefix}-preThink-process`)}>
+          正在生成 <img src={generatingDoc} alt="" />
+        </div>
+        <div className={classNames(`${prefix}-preThink-title`)}>深圳德胜电子科技有限公司供应商风险评估报告 </div>
+        <div className={classNames(`${prefix}-preThink-finish`)}>
+          好的，<span className={classNames(`${prefix}-preThink-finish-agent`)}>采购智能风控Agent</span>{' '}
+          已接收到您的任务
+        </div>
+      </div>
+
+      <div className={classNames(`${prefix}-container`, { show: state.showMain })}>
+        <div className={classNames(`${prefix}-header-container`)}>
+          {/* 思考过程标题 - 控制展开收起 */}
+          <div className={classNames(`${prefix}-header`)} onClick={() => onClick()}>
+            <img className={classNames(`${prefix}-header-svg`)} src={light} alt="" />
+            <div className={classNames(`${prefix}-header-title`)}>思考过程</div>
+            <div className={classNames(`${prefix}-header-icon`)}>
+              <Icon type="arrow-right" className={classNames(`arrow-icon`, { down: state.showMain })} />
+            </div>
+          </div>
+          <div className={classNames(`${prefix}-header-container-content`, { show: state.showMain })}>
+            系统检测出您的企业是电子科技，并采用ETO的生产制造模式。ETO模式的特点是个性化强、项目制，所以呆滞风险主要来自设计变更，您的深层需求可能不只是简单的分析报告，而是希望找到呆滞的根本原因，并减少呆滞库存，降低库存呆滞金额；需要强调归因到具体项目和客户，因此分析报告中会体现项目、ECN变更以及客户等维度的分析，同时给出相应的呆滞处理建议。
+          </div>
+        </div>
+
         <div className={classNames(`${main}`, { show: state.showMain })}>
           <>
             {state?.center && (
@@ -191,6 +216,30 @@ const ThinkCard = (props: ThinkProps) => {
               </div>
             )}
           </>
+        </div>
+      </div>
+
+      {/* 固定底部的标题部分 - 不控制展开收起 */}
+      <div className={classNames(`${prefix}-footer`)}>
+        <div className={classNames(`${prefix}-title`)}>
+          <div className={classNames(`${prefix}-title-logo`)}>
+            <div className={classNames(`${prefix}-title-logo-write`)}>
+              <img src={write} alt="" />
+            </div>
+            {/* {!isComplete && !isStop && <div className={classNames(`${prefix}-title-logo-loading`)} />} */}
+            {/* <div className={classNames(`${prefix}-title-logo-star`)} /> */}
+            {/* {(isComplete || isStop) && <div className={classNames(`${prefix}-title-logo-done`)} />} */}
+          </div>
+          <div className={classNames(`${prefix}-title-main`)}>
+            <div>{state?.title}</div>
+            {!isComplete && !isStop && (
+              <div>
+                <span>（{state.agentNumber?.[0] || 0}</span>
+                <span>/{state.agentNumber?.[1] || 0}）</span>
+              </div>
+            )}
+          </div>
+          <div className={classNames(`${prefix}-icon`)}>{/* 底部标题部分没有交互功能 */}</div>
         </div>
       </div>
     </div>

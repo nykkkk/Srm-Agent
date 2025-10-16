@@ -989,7 +989,7 @@ export const mockHtml1 = `<!DOCTYPE html>
                         sans: ['Inter', 'system-ui', 'sans-serif'],
                     },
                     screens: {
-                        'xs': '320px',
+                        'xs': '358px',
                     }
                 }
             }
@@ -1046,7 +1046,7 @@ export const mockHtml1 = `<!DOCTYPE html>
         }
     </style>
 </head>
-<body class="bg-gray-50 font-sans text-gray-800 min-w-[320px]">
+<body class="bg-gray-50 font-sans text-gray-800">
     <!-- 顶部导航栏 -->
     <header class="bg-primary text-white p-4 relative">
         <button class="absolute left-4 top-1/2 transform -translate-y-1/2">

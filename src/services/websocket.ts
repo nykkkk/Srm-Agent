@@ -30,6 +30,7 @@ export const request: any = (dp: any) => {
       const { type, title, id, process, subtitle, agentNumber, status, content } = v
       const isCreate = status === 'create'
       const isCenterTop = typeof process === 'undefined'
+      console.log('content', type)
 
       if (type === 'stop') {
         thinkCardData.stop = true
@@ -56,18 +57,21 @@ export const request: any = (dp: any) => {
               main: [],
             }
           } else {
-            const target = thinkCardData
-            if (target) {
+            // const target = thinkCardData
+            // thinkCardData是immer的草稿对象，这里是把target也指向了草稿对象，按理说是完全等价的
+            // 不需要这句，下面的target也可以写成thinkCardData
+            // 因为是最上面的top，没有id需要识别，下面的center内容有id，通过id去识别然后编辑
+            if (thinkCardData) {
               if (typeof title === 'string') {
-                target.title = title
+                thinkCardData.title = title
               }
               if (Array.isArray(agentNumber)) {
-                target.agentNumber = agentNumber
+                thinkCardData.agentNumber = agentNumber
               }
               if (typeof process === 'number') {
-                target.process = process
+                thinkCardData.process = process
                 if (process === 100) {
-                  target.showMain = false
+                  thinkCardData.showMain = false
                 }
               }
             }
