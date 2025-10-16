@@ -26,6 +26,7 @@ export type ThinkCardData = {
   process: number
   showMain: boolean
   stop?: boolean
+  pre?: string
   main: {
     id: string
     title: string
@@ -72,6 +73,59 @@ const ThinkCard = (props: ThinkProps) => {
 
   const chatProRef = useChatPro()
 
+  // 添加动画状态管理
+  const [animationState, setAnimationState] = useState({
+    showPreThink: false,
+    showProcess: false,
+    showTitle: false,
+    showFinish: false,
+    showThinkingContent: false, // 控制思考内容的显示
+    hidePreThink: false, // 新增：控制 preThink 部分的隐藏
+  })
+
+  // 使用 ref 来跟踪动画是否已经开始
+  const animationStartedRef = useRef(false)
+
+  useEffect(() => {
+    // 确保只在组件首次渲染时开始动画，并且有状态数据
+    if (state && !animationStartedRef.current) {
+      animationStartedRef.current = true
+
+      // 延迟开始动画，让组件先渲染
+      setTimeout(() => {
+        setAnimationState((draft) => {
+          draft.showPreThink = true
+        })
+
+        // 依次显示各个元素
+        setTimeout(() => {
+          setAnimationState((draft) => {
+            draft.showProcess = true
+          })
+        }, 300)
+
+        setTimeout(() => {
+          setAnimationState((draft) => {
+            draft.showTitle = true
+          })
+        }, 600)
+
+        setTimeout(() => {
+          setAnimationState((draft) => {
+            draft.showFinish = true
+          })
+
+          // 当最后一个元素动画完成后，显示思考内容
+          setTimeout(() => {
+            setAnimationState((draft) => {
+              draft.showThinkingContent = true
+            })
+          }, 500)
+        }, 900)
+      }, 100)
+    }
+  }, [state])
+
   const onClick = (type: string | undefined = undefined, id?: string) => {
     chatProRef.setChatMessage(state?.id, (msg: any) => {
       return produce(msg, (draftState: any) => {
@@ -102,38 +156,53 @@ const ThinkCard = (props: ThinkProps) => {
   if (isComplete || isStop) {
     stopThink()
   }
+  // 监听思考完成状态，隐藏 preThink 部分
+  useEffect(() => {
+    if ((isComplete || isStop) && !animationState.hidePreThink) {
+      // 添加延迟，让用户能看到预思考部分的完成状态
+      const timer = setTimeout(() => {
+        setAnimationState((draft) => {
+          draft.hidePreThink = true
+        })
+      }, 1000) // 延迟 1 秒后隐藏
 
+      return () => clearTimeout(timer)
+    }
+  }, [isComplete, isStop, animationState.hidePreThink])
   return (
     <div className={classNames(prefix)}>
-      {/* {!isComplete && !isStop && (
-        <div className={classNames(`${prefix}-preThink`)}>
-          <img className={classNames(`${prefix}-preThink-svg`)} src={thinking} alt="" />
-          <div className={classNames(`${prefix}-preThink-process`)}>
-            正在生成 <img src={generatingDoc} alt="" />
-          </div>
-          <div className={classNames(`${prefix}-preThink-title`)}>深圳德胜电子科技有限公司供应商风险评估报告 </div>
-          <div className={classNames(`${prefix}-preThink-finish`)}>
-            好的，<span className={classNames(`${prefix}-preThink-finish-agent`)}>采购智能风控Agent</span>{' '}
-            已接收到您的任务
-          </div>
-        </div>
-      )} */}
-
-      <div className={classNames(`${prefix}-preThink`)}>
-        <img className={classNames(`${prefix}-preThink-svg`)} src={thinking} alt="" />
-        <div className={classNames(`${prefix}-preThink-process`)}>
+      {/* preThink 部分 - 思考完成后隐藏 */}
+      <div
+        className={classNames(`${prefix}-preThink`, {
+          'animate-in': animationState.showPreThink,
+          'animate-out': (isComplete || isStop) && animationState.hidePreThink, // 添加淡出动画
+        })}
+      >
+        <img
+          className={classNames(`${prefix}-preThink-svg`, { 'animate-in': animationState.showPreThink })}
+          src={thinking}
+          alt=""
+        />
+        <div className={classNames(`${prefix}-preThink-process`, { 'animate-in': animationState.showProcess })}>
           正在生成 <img src={generatingDoc} alt="" />
         </div>
-        <div className={classNames(`${prefix}-preThink-title`)}>深圳德胜电子科技有限公司供应商风险评估报告 </div>
-        <div className={classNames(`${prefix}-preThink-finish`)}>
+        <div className={classNames(`${prefix}-preThink-title`, { 'animate-in': animationState.showTitle })}>
+          深圳德胜电子科技有限公司供应商风险评估报告
+        </div>
+        <div className={classNames(`${prefix}-preThink-finish`, { 'animate-in': animationState.showFinish })}>
           好的，<span className={classNames(`${prefix}-preThink-finish-agent`)}>采购智能风控Agent</span>{' '}
           已接收到您的任务
         </div>
       </div>
 
-      <div className={classNames(`${prefix}-container`, { show: state.showMain })}>
+      {/* 思考内容部分 */}
+      <div
+        className={classNames(`${prefix}-container`, {
+          show: state.showMain,
+          'thinking-animate-in': animationState.showThinkingContent,
+        })}
+      >
         <div className={classNames(`${prefix}-header-container`)}>
-          {/* 思考过程标题 - 控制展开收起 */}
           <div className={classNames(`${prefix}-header`)} onClick={() => onClick()}>
             <img className={classNames(`${prefix}-header-svg`)} src={light} alt="" />
             <div className={classNames(`${prefix}-header-title`)}>
@@ -143,98 +212,91 @@ const ThinkCard = (props: ThinkProps) => {
               <Icon type="arrow-right" className={classNames(`arrow-icon`, { down: state.showMain })} />
             </div>
           </div>
-          <div className={classNames(`${prefix}-header-container-content`, { show: state.showMain })}>
-            系统检测出您的企业是电子科技，并采用ETO的生产制造模式。ETO模式的特点是个性化强、项目制，所以呆滞风险主要来自设计变更，您的深层需求可能不只是简单的分析报告，而是希望找到呆滞的根本原因，并减少呆滞库存，降低库存呆滞金额；需要强调归因到具体项目和客户，因此分析报告中会体现项目、ECN变更以及客户等维度的分析，同时给出相应的呆滞处理建议。
-          </div>
+          <div className={classNames(`${prefix}-header-container-content`, { show: state.showMain })}>{state?.pre}</div>
         </div>
 
         <div className={classNames(`${main}`, { show: state.showMain })}>
-          <>
-            {state?.center && (
-              <div className={classNames(`${main}-center`)}>
-                <div className={classNames(`${main}-center-title`)} onClick={() => onClick('center')}>
-                  <div>{state.center.title}</div>
-                  <Icon type="arrow-down" className={classNames(`arrow-icon`, { up: state.center.show })} />
-                </div>
-                <div className={classNames(`${main}-center-content`, { show: state.center.show })}>
-                  {state.center.list.map((item: any, index: number) => {
-                    const { title, subtitle, process } = item
-                    const img = process === 100 ? (index === 0 ? oImg : tImg) : null
-                    return (
-                      <div className={classNames(`${main}-center-content-item`)} key={title}>
-                        <div className="center-logo">
-                          {img ? (
-                            <img src={img} alt="" />
-                          ) : (
-                            <div>
-                              <Icon type={isStop ? 'forbid' : 'loadding-circle'} spin={!isStop} />
-                            </div>
-                          )}
-                        </div>
-                        <div>
-                          <div className="center-title">{title}</div>
-                          {subtitle && (
-                            <div className="center-subtitle" dangerouslySetInnerHTML={{ __html: subtitle }} />
-                          )}
-                        </div>
-                      </div>
-                    )
-                  })}
-                </div>
+          {state?.center && (
+            <div className={classNames(`${main}-center`)}>
+              <div className={classNames(`${main}-center-title`)} onClick={() => onClick('center')}>
+                <div>{state.center.title}</div>
+                <Icon type="arrow-down" className={classNames(`arrow-icon`, { up: state.center.show })} />
               </div>
-            )}
-          </>
-
-          <>
-            {Array.isArray(state?.main) && state?.main.length > 0 && (
-              <div className={classNames(`${main}-bottom`)}>
-                {state?.main.map((item: any) => {
-                  const { title, subtitle, process, content, show, id } = item
-                  const icon = process === 100 ? dImg : isStop ? awImg : alImg
+              <div className={classNames(`${main}-center-content`, { show: state.center.show })}>
+                {state.center.list.map((item: any, index: number) => {
+                  const { title, subtitle, process, id } = item
+                  const img = process === 100 ? (index === 0 ? oImg : tImg) : null
                   return (
-                    <div className={classNames(`${main}-bottom-item`, { show })} key={id}>
-                      <div
-                        className={classNames(`${main}-bottom-item-title`, { show })}
-                        onClick={() => onClick('bottom', id)}
-                      >
-                        <div className="bottom-title">
-                          <img className={classNames({ loading: process !== 100 })} src={icon} alt="" />
-                          <div>{title}</div>
-                        </div>
-                        <Icon type="arrow-down" className={classNames(`arrow-icon`, { up: show })} />
+                    <div className={classNames(`${main}-center-content-item`)} key={id || `center-${index}`}>
+                      <div className="center-logo">
+                        {img ? (
+                          <img src={img} alt="" />
+                        ) : (
+                          <div>
+                            <Icon type={isStop ? 'forbid' : 'loadding-circle'} spin={!isStop} />
+                          </div>
+                        )}
                       </div>
-                      <div className={classNames(`${main}-bottom-item-content`, { show })}>
-                        <div className="bottom-img">
-                          <img src={think} alt="" />
-                        </div>
-                        <div>
-                          <div className="bottom-subtitle">{subtitle}</div>
-                          {content && <div className="bottom-content" dangerouslySetInnerHTML={{ __html: content }} />}
-                        </div>
+                      <div>
+                        <div className="center-title">{title}</div>
+                        {subtitle && <div className="center-subtitle" dangerouslySetInnerHTML={{ __html: subtitle }} />}
                       </div>
                     </div>
                   )
                 })}
               </div>
-            )}
-          </>
+            </div>
+          )}
+
+          {Array.isArray(state?.main) && state?.main.length > 0 && (
+            <div className={classNames(`${main}-bottom`)}>
+              {state?.main.map((item: any) => {
+                const { title, subtitle, process, content, show, id } = item
+                const icon = process === 100 ? dImg : isStop ? awImg : alImg
+                return (
+                  <div className={classNames(`${main}-bottom-item`, { show })} key={id}>
+                    <div
+                      className={classNames(`${main}-bottom-item-title`, { show })}
+                      onClick={() => onClick('bottom', id)}
+                    >
+                      <div className="bottom-title">
+                        <img className={classNames({ loading: process !== 100 })} src={icon} alt="" />
+                        <div>{title}</div>
+                      </div>
+                      <Icon type="arrow-down" className={classNames(`arrow-icon`, { up: show })} />
+                    </div>
+                    <div className={classNames(`${main}-bottom-item-content`, { show })}>
+                      <div className="bottom-img">
+                        <img src={think} alt="" />
+                      </div>
+                      <div>
+                        <div className="bottom-subtitle">{subtitle}</div>
+                        {content && <div className="bottom-content" dangerouslySetInnerHTML={{ __html: content }} />}
+                      </div>
+                    </div>
+                  </div>
+                )
+              })}
+            </div>
+          )}
         </div>
       </div>
 
-      {/* 固定底部的标题部分 - 不控制展开收起 */}
-      <div className={classNames(`${prefix}-footer`)}>
+      {/* 固定底部的标题部分 */}
+      <div
+        className={classNames(`${prefix}-footer`, {
+          'thinking-animate-in': animationState.showThinkingContent,
+        })}
+      >
         <div className={classNames(`${prefix}-title`)}>
           <div className={classNames(`${prefix}-title-logo`)}>
             <div
               className={classNames(`${prefix}-title-logo-write`, {
-                completed: isComplete || isStop, // 思考结束或停止时添加 completed 类
+                completed: isComplete || isStop,
               })}
             >
               <img src={write} alt="" />
             </div>
-            {/* {!isComplete && !isStop && <div className={classNames(`${prefix}-title-logo-loading`)} />} */}
-            {/* <div className={classNames(`${prefix}-title-logo-star`)} /> */}
-            {/* {(isComplete || isStop) && <div className={classNames(`${prefix}-title-logo-done`)} />} */}
           </div>
           <div className={classNames(`${prefix}-title-main`)}>
             <div>{state?.title}</div>
@@ -245,7 +307,7 @@ const ThinkCard = (props: ThinkProps) => {
               </div>
             )}
           </div>
-          <div className={classNames(`${prefix}-icon`)}>{/* 底部标题部分没有交互功能 */}</div>
+          <div className={classNames(`${prefix}-icon`)}></div>
         </div>
       </div>
     </div>

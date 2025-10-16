@@ -55,6 +55,7 @@ export const request: any = (dp: any) => {
               showMain: true,
               stop: false,
               main: [],
+              pre: '',
             }
           } else {
             // const target = thinkCardData
@@ -108,7 +109,7 @@ export const request: any = (dp: any) => {
               }
             }
           }
-        } else {
+        } else if (type === 'bottom') {
           if (isCreate) {
             thinkCardData.main.push({
               id: id || '',
@@ -134,6 +135,10 @@ export const request: any = (dp: any) => {
                 target.content += content
               }
             }
+          }
+        } else {
+          if (typeof content === 'string') {
+            thinkCardData.pre += content
           }
         }
       }
