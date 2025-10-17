@@ -3,7 +3,7 @@ import { Outlet, request } from 'umi'
 import { useStore } from '@/store'
 import Loading from '@/components/Loading'
 import changeTheme from '@/utils/changeTheme'
-import { getMockData, getRecentAnalysis, getWsUrl } from '@/services'
+import { getMockData, getRecentAnalysis, getWsUrl, getToken, getTestData } from '@/services'
 import { ChatProProvider } from '@kdcloudjs/kdesign-chatui'
 export default function Index() {
   const globalLoading = useStore((s) => s.globalLoading)
@@ -11,8 +11,15 @@ export default function Index() {
   // 在组件中添加调试
   useEffect(() => {
     const init = async () => {
-      const wsMockData = await getRecentAnalysis()
-      console.log('✅getMockData成功:', wsMockData)
+      const token = await getToken()
+      console.log('✅getToken成功:', token)
+      if (token.status === true) {
+        const test = {
+          access_token: token.data.access_token,
+        }
+        const testData = await getTestData(test)
+        console.log('✅getTestData成功:', testData)
+      }
       changeTheme({ color: '#276ff5' })
     }
     init()

@@ -1,7 +1,7 @@
 import { defineConfig } from 'umi'
 
 export default defineConfig({
-  title: 'demo-cui',
+  title: '采购智能风控智能体',
   plugins: ['@umijs/plugins/dist/request'],
   request: {},
   mock: {},
@@ -28,4 +28,16 @@ export default defineConfig({
   fastRefresh: true,
   hash: true,
   npmClient: 'yarn',
+  proxy: {
+    '/api': {
+      target: 'https://feature.kingdee.com:1026',
+      changeOrigin: true,
+      pathRewrite: { '^/api': '' },
+    },
+    '/v2': {
+      target: 'https://feature.kingdee.com:1026/feature_sit_scm/kapi/v2',
+      changeOrigin: true,
+      pathRewrite: { '^/v2': '' },
+    },
+  },
 })

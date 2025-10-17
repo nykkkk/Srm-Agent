@@ -8,7 +8,7 @@ import {
   ProChatInstance,
   RequestWebsocketState,
 } from '@kdcloudjs/kdesign-chatui'
-import { C_HTML, C_THINK, IS_DEV } from '@/constant'
+import { C_ANALYSIS, C_HTML, C_THINK, IS_DEV } from '@/constant'
 import { useStore } from '@/store'
 import { ThinkCardData, ThinkMessage } from '@/customCard/ThinkCard'
 
@@ -207,6 +207,14 @@ export const request: any = (dp: any) => {
         return {
           status: 'singleTyping',
           message: [{ type: C_HTML, content: message }],
+          payload: '',
+        }
+      }
+
+      if (status === C_ANALYSIS) {
+        return {
+          status: 'singleTyping',
+          message: [{ type: C_ANALYSIS, content: message }],
           payload: '',
         }
       }

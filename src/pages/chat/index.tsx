@@ -21,7 +21,7 @@ import VoidInput from '@/components/InputInner/voidInput'
 import DislikeModal from '@/components/DisLikeModal'
 import ChatLoading from '@/components/ChatLoading'
 // import Home from '@/components/Home'
-import Home from '@/pages/homepage'
+import Home from '@/components/homepage'
 
 import './index.less'
 
@@ -63,7 +63,10 @@ const TopNavigation = () => {
     </div>
   )
 }
-
+// 新增的底部提示组件
+const AIDisclaimer = () => {
+  return <div className="ai-disclaimer">内容由AI生成，仅供参考，请仔细甄别</div>
+}
 const App = () => {
   const chatProRef = useChatPro()
 
@@ -219,6 +222,8 @@ const App = () => {
         dispatchTimer={{ singleTyping: 500 }}
         // genMessageId={() => `${new Date().getTime()}`}
       />
+      {/* 在分析阶段显示AI免责声明 */}
+      {hasChat && <AIDisclaimer />}
       {/* <div style={{ width: '1px' }} ref={bottomRef} /> */}
       {/* <DislikeModal {...{ dislikeData, visibleDisLike, setVisibleDisLike }} /> */}
     </div>

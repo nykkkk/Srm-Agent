@@ -1,0 +1,1023 @@
+@primary-color: #165dff;
+@high-risk-color: #f53f3f;
+@medium-risk-color: #ff7d00;
+@low-risk-color: #00b42a;
+@normal-color: #165dff;
+@light-gray: #f2f3f5;
+@card-gray: #f7f8fa;
+
+.supplier-risk-report {
+  //   background-color: @light-gray;
+  margin-left: -16px;
+  width: calc(100% + 32px);
+  min-height: 100vh;
+  font-family: 'Inter', 'system-ui', sans-serif;
+  //   color: #1f2937;
+
+  // 头部样式
+  .report-header {
+    background-color: @primary-color;
+    color: white;
+    padding: 16px;
+    position: relative;
+
+    .back-button {
+      position: absolute;
+      left: 16px;
+      top: 50%;
+      transform: translateY(-50%);
+      border: none;
+      background: none;
+      color: white;
+      font-size: 16px;
+      cursor: pointer;
+    }
+
+    .title {
+      text-align: center;
+      font-weight: 500;
+      font-size: 18px;
+      margin: 0;
+
+      //   @media (min-width: 640px) {
+      //     font-size: 20px;
+      //   }
+    }
+  }
+
+  // 主要内容区域
+  .main-content {
+    // width: 100%;
+    padding: 0;
+    // max-width: 100%;
+    // margin: 0 auto;
+    box-sizing: border-box;
+
+    // @media (min-width: 640px) {
+    //   padding: 0 16px 16px;
+    // }
+  }
+
+  // 卡片通用样式
+  .report-card {
+    background-color: white;
+    border-radius: 8px;
+    padding: 16px;
+    margin-bottom: 16px;
+    box-shadow: 0 1px 2px 0 rgba(0, 0, 0, 0.05);
+    transition: box-shadow 0.2s ease-in-out;
+    box-sizing: border-box;
+
+    &:hover {
+      box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1);
+    }
+
+    // @media (min-width: 640px) {
+    //   padding: 20px;
+    // }
+  }
+
+  // 公司信息样式
+  .company-info {
+    // 标题部分样式
+    .report-title-section {
+      display: flex;
+      margin-bottom: 20px;
+      padding-bottom: 16px;
+      border-bottom: 1px solid #e5e7eb;
+
+      .report-title {
+        font-size: 20px;
+        font-weight: 600;
+        color: #1f2937;
+        margin-left: 10px;
+
+        @media (min-width: 640px) {
+          font-size: 22px;
+          text-align: left;
+        }
+      }
+    }
+
+    .company-header {
+      display: flex;
+      // flex-direction: column;
+      margin-bottom: 16px;
+      gap: 12px;
+
+      .company-details {
+        width: 40px;
+        height: 40px;
+        flex: 1;
+        min-width: 0;
+
+        .company-name {
+          font-size: 18px;
+          font-weight: 600;
+          word-break: break-word;
+          color: #1f2937;
+        }
+
+        .registration-number {
+          color: #6b7280;
+          font-size: 14px;
+          word-break: break-all;
+          margin: 0;
+          line-height: 1.4;
+        }
+      }
+    }
+
+    .tags-container {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 16px;
+      flex-wrap: wrap;
+      gap: 12px;
+
+      .tags-group {
+        display: flex;
+        flex-wrap: wrap;
+        gap: 8px;
+        flex: 1;
+      }
+
+      .tag {
+        background-color: rgba(224, 239, 255, 1);
+        color: @primary-color;
+        font-size: 12px;
+        padding: 4px 8px;
+        border: 1px solid rgba(39, 111, 245, 0.3);
+
+        width: 76;
+        height: 20;
+        border-radius: 2px;
+        border-width: 1px;
+        opacity: 1;
+        top: 228px;
+        left: 152px;
+        gap: 2px;
+      }
+
+      .view-profile {
+        color: @primary-color;
+        font-size: 14px;
+
+        a {
+          text-decoration: none;
+          color: inherit;
+          display: flex;
+          align-items: center;
+          font-weight: 500;
+          white-space: nowrap;
+
+          &:hover {
+            opacity: 0.8;
+          }
+
+          .fa-angle-right {
+            margin-left: 4px;
+            transition: transform 0.2s ease;
+          }
+
+          &:hover .fa-angle-right {
+            transform: translateX(2px);
+          }
+        }
+      }
+    }
+
+    .company-stats {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      font-size: 14px;
+      color: #6b7280;
+      border-top: 1px solid #f3f4f6;
+      padding-top: 16px;
+      gap: 16px;
+
+      .stat-item {
+        text-align: left;
+
+        .stat-label {
+          font-size: 12px;
+          color: #6b7280;
+          margin: 0 0 6px 0;
+          font-weight: 400;
+        }
+
+        .stat-value {
+          font-size: 14px;
+          font-weight: 500;
+          margin: 0;
+          color: #1f2937;
+        }
+      }
+    }
+  }
+
+  // 响应式适配
+  //   @media (max-width: 640px) {
+  //     .company-info {
+  //       .tags-container {
+  //         flex-direction: column;
+  //         align-items: flex-start;
+  //         gap: 12px;
+
+  //         .tags-group {
+  //           width: 100%;
+  //         }
+
+  //         .view-profile {
+  //           align-self: flex-end;
+  //         }
+  //       }
+
+  //       .company-stats {
+  //         grid-template-columns: repeat(2, 1fr);
+  //         gap: 12px;
+
+  //         .stat-item {
+  //           &:last-child {
+  //             grid-column: 1 / -1;
+  //           }
+  //         }
+  //       }
+  //     }
+  //   }
+
+  //   @media (max-width: 480px) {
+  //     .company-info {
+  //       .report-title-section {
+  //         .report-title {
+  //           font-size: 18px;
+  //         }
+  //       }
+
+  //       .company-stats {
+  //         grid-template-columns: 1fr;
+
+  //         .stat-item {
+  //           &:last-child {
+  //             grid-column: 1;
+  //           }
+  //         }
+  //       }
+  //     }
+  //   }
+
+  // 风险评估样式
+  .risk-assessment {
+    .risk-assessment-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 16px;
+      .section-title {
+        font-size: 18px;
+        font-weight: 600;
+        // margin: 0 0 16px 0;
+      }
+      .risk-level-tag {
+        width: 166px;
+        height: 58px;
+        border-radius: 8px;
+        display: flex;
+        justify-content: right;
+        align-items: center;
+        // 背景
+        background: linear-gradient(270deg, rgba(255, 153, 28, 0.06) 2.52%, rgba(255, 153, 28, 0) 104.86%);
+      }
+    }
+
+    .chart-container {
+      display: flex;
+      justify-content: center;
+      margin-bottom: 24px;
+
+      .radar-chart {
+        width: 228px;
+        height: 228px;
+        position: relative;
+
+        // @media (min-width: 640px) {
+        //   width: 256px;
+        //   height: 256px;
+        // }
+      }
+    }
+
+    .ai-interpretation {
+      background-color: #eff6ff;
+      background: // linear-gradient(0deg, #ffffff, #ffffff),
+        linear-gradient(270deg, rgba(0, 175, 239, 0.08) 0%, rgba(2, 91, 255, 0.08) 100%);
+
+      border: 1px solid #dbeafe;
+      border-radius: 8px;
+      padding: 16px;
+
+      .ai-header {
+        display: flex;
+        align-items: center;
+        margin-bottom: 8px;
+
+        .ai-icon {
+          color: @primary-color;
+          margin-right: 8px;
+          font-size: 14px;
+        }
+
+        .ai-title {
+          font-weight: 500;
+          font-size: 14px;
+          margin: 0;
+
+          //   @media (min-width: 640px) {
+          //     font-size: 16px;
+          //   }
+        }
+      }
+
+      .ai-content {
+        font-size: 12px;
+        line-height: 1.5;
+        margin-bottom: 12px;
+        margin: 0 0 12px 0;
+
+        // @media (min-width: 640px) {
+        //   font-size: 14px;
+        // }
+      }
+
+      .key-findings {
+        font-size: 12px;
+        font-weight: 500;
+        margin-bottom: 4px;
+        margin: 0 0 4px 0;
+
+        // @media (min-width: 640px) {
+        //   font-size: 14px;
+        // }
+      }
+
+      .findings-list {
+        font-size: 12px;
+        color: #374151;
+        list-style-type: disc;
+        padding-left: 16px;
+        margin-bottom: 12px;
+        margin: 0 0 12px 0;
+
+        // @media (min-width: 640px) {
+        //   font-size: 14px;
+        // }
+
+        .finding-item {
+          line-height: 1.5;
+          margin-bottom: 4px;
+        }
+      }
+
+      .view-analysis {
+        color: @primary-color;
+        font-size: 12px;
+        display: flex;
+        align-items: center;
+        text-decoration: none;
+
+        @media (min-width: 640px) {
+          font-size: 14px;
+        }
+      }
+    }
+  }
+
+  // 风险标签样式
+  .risk-tag {
+    font-size: 18px;
+    padding: 2px 8px;
+    border-radius: 16px;
+    font-weight: 600;
+    display: inline-block;
+    line-height: 1.2;
+
+    &.high-risk {
+      color: @high-risk-color;
+    }
+
+    &.medium-risk {
+      color: @medium-risk-color;
+    }
+
+    &.low-risk {
+      color: @low-risk-color;
+    }
+
+    &.normal-risk {
+      color: @normal-color;
+    }
+  }
+
+  // 风险颜色指示器
+  .risk-indicator {
+    width: 12px;
+    height: 12px;
+    border-radius: 50%;
+    display: inline-block;
+    flex-shrink: 0;
+  }
+
+  // 风险背景色
+  .risk-bg {
+    &.high-risk {
+      background-color: fade(@high-risk-color, 5%);
+    }
+
+    &.medium-risk {
+      background-color: fade(@medium-risk-color, 5%);
+    }
+
+    &.low-risk {
+      background-color: fade(@low-risk-color, 5%);
+    }
+
+    &.normal-risk {
+      background-color: fade(@normal-color, 5%);
+    }
+  }
+
+  // 风险边框色
+  .risk-border {
+    border-left-style: solid;
+    border-left-width: 2px;
+
+    &.high-risk {
+      border-color: fade(@high-risk-color, 30%);
+    }
+
+    &.medium-risk {
+      border-color: fade(@medium-risk-color, 30%);
+    }
+
+    &.low-risk {
+      border-color: fade(@low-risk-color, 30%);
+    }
+
+    &.normal-risk {
+      border-color: fade(@normal-color, 30%);
+    }
+  }
+
+  // 风险速览样式
+  .risk-overview {
+    .section-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 16px;
+
+      .section-title {
+        font-size: 18px;
+        font-weight: 600;
+        margin: 0;
+        background-image: url('./img/underline.svg');
+      }
+
+      .risk-count {
+        font-size: 12px;
+        color: #6b7280;
+
+        // @media (min-width: 640px) {
+        //   font-size: 14px;
+        // }
+      }
+    }
+
+    .risk-category {
+      margin-bottom: 16px;
+
+      .category-header {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        cursor: pointer;
+        padding: 8px 0;
+
+        .category-info {
+          display: flex;
+          align-items: center;
+          gap: 8px;
+
+          .category-name {
+            font-weight: 500;
+            font-size: 14px;
+            margin: 0;
+
+            // @media (min-width: 640px) {
+            //   font-size: 16px;
+            // }
+          }
+        }
+
+        .category-count {
+          display: flex;
+          align-items: center;
+
+          .count {
+            font-size: 12px;
+            color: #6b7280;
+            margin-right: 8px;
+
+            // @media (min-width: 640px) {
+            //   font-size: 14px;
+            // }
+          }
+
+          .expand-icon {
+            transition: transform 0.3s ease;
+            font-size: 14px;
+
+            &.rotated {
+              transform: rotate(180deg);
+            }
+          }
+        }
+      }
+
+      .risk-items {
+        margin-top: 12px;
+        padding-left: 16px;
+        border-left-width: 2px;
+        display: flex;
+        flex-direction: column;
+        gap: 12px;
+
+        // @media (min-width: 640px) {
+        //   padding-left: 20px;
+        // }
+
+        .risk-item {
+          padding: 12px;
+          border-radius: 8px;
+
+          .item-title {
+            font-weight: 500;
+            font-size: 14px;
+            margin: 0 0 4px 0;
+          }
+
+          .item-description {
+            font-size: 12px;
+            color: #6b7280;
+            margin: 0;
+            line-height: 1.4;
+
+            // @media (min-width: 640px) {
+            //   font-size: 14px;
+            // }
+          }
+        }
+      }
+    }
+  }
+
+  // 风险详情样式
+  .risk-details {
+    .details-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 24px;
+
+      .details-title {
+        font-size: 18px;
+        font-weight: 600;
+        margin: 0;
+      }
+
+      .indicators-count {
+        font-size: 12px;
+        color: #6b7280;
+
+        // @media (min-width: 640px) {
+        //   font-size: 14px;
+        // }
+      }
+    }
+
+    .detail-category {
+      margin-bottom: 24px;
+
+      .category-header {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        cursor: pointer;
+        padding: 8px 0;
+
+        .category-name {
+          font-weight: 500;
+          font-size: 14px;
+          margin: 0;
+
+          //   @media (min-width: 640px) {
+          //     font-size: 16px;
+          //   }
+        }
+
+        .abnormal-count {
+          display: flex;
+          align-items: center;
+
+          .count {
+            font-size: 12px;
+            color: #6b7280;
+            margin-right: 8px;
+
+            // @media (min-width: 640px) {
+            //   font-size: 14px;
+            // }
+          }
+
+          .expand-icon {
+            transition: transform 0.3s ease;
+            font-size: 14px;
+
+            &.rotated {
+              transform: rotate(180deg);
+            }
+          }
+        }
+      }
+
+      .indicators-container {
+        margin-top: 16px;
+        display: flex;
+        flex-direction: column;
+        gap: 16px;
+
+        // @media (min-width: 640px) {
+        //   gap: 24px;
+        // }
+
+        .indicator {
+          .indicator-header {
+            display: flex;
+            flex-direction: column;
+            margin-bottom: 8px;
+            gap: 8px;
+
+            // @media (min-width: 640px) {
+            //   flex-direction: row;
+            //   align-items: center;
+            //   justify-content: space-between;
+            // }
+
+            .indicator-name {
+              font-weight: 500;
+              font-size: 14px;
+              margin: 0;
+
+              //   @media (min-width: 640px) {
+              //     font-size: 16px;
+              //   }
+            }
+          }
+
+          .result-card {
+            background-color: #f9fafb;
+            padding: 12px;
+            border-radius: 8px;
+            margin-bottom: 12px;
+
+            .result-text {
+              font-size: 12px;
+              margin-bottom: 4px;
+              margin: 0 0 4px 0;
+              line-height: 1.4;
+
+              //   @media (min-width: 640px) {
+              //     font-size: 14px;
+              //   }
+            }
+
+            .score-range {
+              font-size: 12px;
+              color: #6b7280;
+              margin: 0;
+              line-height: 1.4;
+
+              //   @media (min-width: 640px) {
+              //     font-size: 14px;
+              //   }
+            }
+          }
+
+          .ai-suggestion {
+            background-color: #eff6ff;
+            padding: 12px;
+            border-radius: 8px;
+            margin-bottom: 16px;
+
+            .suggestion-header {
+              display: flex;
+              align-items: center;
+              margin-bottom: 4px;
+
+              .suggestion-icon {
+                color: @primary-color;
+                margin-right: 4px;
+                font-size: 12px;
+
+                // @media (min-width: 640px) {
+                //   font-size: 14px;
+                // }
+              }
+
+              .suggestion-title {
+                font-weight: 500;
+                font-size: 12px;
+                margin: 0;
+
+                // @media (min-width: 640px) {
+                //   font-size: 14px;
+                // }
+              }
+            }
+
+            .suggestion-text {
+              font-size: 12px;
+              margin: 0;
+              line-height: 1.4;
+
+              //   @media (min-width: 640px) {
+              //     font-size: 14px;
+              //   }
+            }
+          }
+
+          .chart-section {
+            .chart-title {
+              font-weight: 500;
+              font-size: 12px;
+              margin-bottom: 8px;
+              display: flex;
+              align-items: center;
+              margin: 0 0 8px 0;
+
+              //   @media (min-width: 640px) {
+              //     font-size: 14px;
+              //   }
+
+              .chart-icon {
+                color: #6b7280;
+                margin-right: 4px;
+                font-size: 12px;
+              }
+            }
+
+            .chart-container {
+              // height: 200px;
+              // width: 100%;
+              position: relative;
+            }
+          }
+        }
+      }
+    }
+  }
+
+  // 改进建议样式
+  .improvement-suggestions {
+    .suggestions-header {
+      font-size: 18px;
+      font-weight: 600;
+      margin-bottom: 16px;
+      display: flex;
+      align-items: center;
+      margin: 0 0 16px 0;
+
+      .suggestions-icon {
+        color: @primary-color;
+        margin-right: 8px;
+      }
+    }
+
+    .suggestions-list {
+      display: flex;
+      flex-direction: column;
+      gap: 12px;
+
+      //   @media (min-width: 640px) {
+      //     gap: 16px;
+      //   }
+
+      .suggestion-item {
+        background-color: #f9fafb;
+        padding: 12px;
+        border-radius: 8px;
+
+        // @media (min-width: 640px) {
+        //   padding: 16px;
+        // }
+
+        .suggestion-title {
+          font-weight: 500;
+          color: @primary-color;
+          font-size: 14px;
+          margin-bottom: 8px;
+          display: flex;
+          align-items: center;
+          margin: 0 0 8px 0;
+
+          //   @media (min-width: 640px) {
+          //     font-size: 16px;
+          //   }
+
+          .title-icon {
+            margin-right: 8px;
+          }
+        }
+
+        .suggestion-description {
+          font-size: 12px;
+          color: #374151;
+          line-height: 1.5;
+          margin: 0;
+
+          //   @media (min-width: 640px) {
+          //     font-size: 14px;
+          //   }
+        }
+      }
+    }
+  }
+
+  // 报告下载样式
+  .report-download {
+    .download-description {
+      font-size: 12px;
+      color: #6b7280;
+      margin-bottom: 12px;
+      margin: 0 0 12px 0;
+
+      //   @media (min-width: 640px) {
+      //     font-size: 14px;
+      //   }
+    }
+
+    .download-card {
+      border: 1px solid #e5e7eb;
+      border-radius: 8px;
+      padding: 12px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+
+      //   @media (min-width: 640px) {
+      //     padding: 16px;
+      //   }
+
+      .file-info {
+        display: flex;
+        align-items: center;
+        min-width: 0;
+        flex: 1;
+
+        .file-icon {
+          width: 32px;
+          height: 32px;
+          background-color: #dbeafe;
+          border-radius: 50%;
+          display: flex;
+          align-items: center;
+          justify-content: center;
+          color: @primary-color;
+          margin-right: 8px;
+          flex-shrink: 0;
+
+          //   @media (min-width: 640px) {
+          //     width: 40px;
+          //     height: 40px;
+          //     margin-right: 12px;
+          //   }
+
+          .icon {
+            font-size: 14px;
+
+            // @media (min-width: 640px) {
+            //   font-size: 18px;
+            // }
+          }
+        }
+
+        .file-details {
+          min-width: 0;
+          flex: 1;
+
+          .file-name {
+            font-size: 12px;
+            font-weight: 500;
+            overflow: hidden;
+            text-overflow: ellipsis;
+            white-space: nowrap;
+            margin: 0 0 2px 0;
+
+            // @media (min-width: 640px) {
+            //   font-size: 14px;
+            // }
+          }
+
+          .file-meta {
+            font-size: 12px;
+            color: #6b7280;
+            margin: 0;
+          }
+        }
+      }
+
+      .download-button {
+        color: @primary-color;
+        font-size: 12px;
+        display: flex;
+        align-items: center;
+        white-space: nowrap;
+        margin-left: 8px;
+        border: none;
+        background: none;
+        cursor: pointer;
+        padding: 4px 8px;
+        border-radius: 4px;
+        transition: background-color 0.2s;
+
+        &:hover {
+          background-color: #f3f4f6;
+        }
+
+        // @media (min-width: 640px) {
+        //   font-size: 14px;
+        // }
+
+        .download-icon {
+          margin-right: 4px;
+        }
+      }
+    }
+  }
+}
+
+// 390px 宽度的特殊适配
+// @media (max-width: 390px) {
+//   .supplier-risk-report {
+//     .main-content {
+//       padding: 0 8px 12px;
+//     }
+
+//     .report-card {
+//       padding: 12px;
+//       margin-bottom: 12px;
+//     }
+
+//     .company-info {
+//       .company-stats {
+//         grid-template-columns: 1fr;
+//         gap: 8px;
+//       }
+//     }
+
+//     .risk-assessment {
+//       .chart-container {
+//         .radar-chart {
+//           width: 160px;
+//           height: 160px;
+//         }
+//       }
+//     }
+//   }
+// }
+
+// 通用响应式设计
+// @media (max-width: 480px) {
+//   .responsive-grid {
+//     grid-template-columns: 1fr;
+//   }
+
+//   .responsive-text {
+//     font-size: 14px;
+//   }
+
+//   .responsive-padding {
+//     padding: 16px;
+//   }
+// }
+
+// @media (max-width: 360px) {
+//   .mobile-compact {
+//     padding: 12px;
+//   }
+
+//   .mobile-text-sm {
+//     font-size: 13px;
+//   }
+// }

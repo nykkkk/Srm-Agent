@@ -1,8 +1,8 @@
 import { sleep } from '@/utils'
 import { ws, http, HttpResponse } from 'msw'
 import { setupWorker } from 'msw/browser'
-import { mockData, mockThinkCard, mockThinkCardStream, mockHtml, mockHtml1 } from './mockSocketData'
-import { C_HTML, C_THINK } from '@/constant'
+import { mockData, mockThinkCard, mockThinkCardStream, mockHtml, mockHtml1, reportData } from './mockSocketData'
+import { C_ANALYSIS, C_HTML, C_THINK } from '@/constant'
 
 const chat = ws.link('wss://chat.example.com')
 
@@ -14,20 +14,24 @@ const handlers = [
       const send = (m: any) => client.send(JSON.stringify(m))
 
       if (event.data !== 'ping') {
-        for (const { message } of mockThinkCardStream) {
-          /* eslint-disable-next-line no-await-in-loop */
-          await sleep(100)
-          client.send(JSON.stringify({ status: C_THINK, message }))
-        }
+        // for (const { message } of mockThinkCardStream) {
+        //   /* eslint-disable-next-line no-await-in-loop */
+        //   await sleep(100)
+        //   client.send(JSON.stringify({ status: C_THINK, message }))
+        // }
         // for (const { message } of mockThinkCard) {
         //   /* eslint-disable-next-line no-await-in-loop */
         //   await sleep(1000)
         //   client.send(JSON.stringify({ status: C_THINK, message }))
         // }
         // send({ message: 'start', status: 'start' })
+        // send({
+        //   status: C_HTML,
+        //   message: mockHtml1,
+        // })
         send({
-          status: C_HTML,
-          message: mockHtml1,
+          status: C_ANALYSIS,
+          message: reportData,
         })
         // for (let i = 0; i < 5; i++) {
         //   send({ message: '12347', status: 'append' })
