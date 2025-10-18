@@ -329,9 +329,12 @@
         }
 
         .ai-title {
-          font-weight: 500;
-          font-size: 14px;
-          margin: 0;
+          font-family: PingFang SC;
+          font-weight: 600;
+          font-style: Semibold;
+          font-size: 16px;
+          line-height: 28px;
+          letter-spacing: 0px;
 
           //   @media (min-width: 640px) {
           //     font-size: 16px;
@@ -340,10 +343,16 @@
       }
 
       .ai-content {
-        font-size: 12px;
         line-height: 1.5;
         margin-bottom: 12px;
         margin: 0 0 12px 0;
+
+        font-family: PingFang SC;
+        font-weight: 500;
+        font-style: Medium;
+        font-size: 14px;
+        line-height: 24px;
+        letter-spacing: 0px;
 
         // @media (min-width: 640px) {
         //   font-size: 14px;
@@ -351,10 +360,13 @@
       }
 
       .key-findings {
-        font-size: 12px;
-        font-weight: 500;
         margin-bottom: 4px;
-        margin: 0 0 4px 0;
+        font-family: PingFang SC;
+        font-weight: 500;
+        font-style: Medium;
+        font-size: 14px;
+        line-height: 24px;
+        letter-spacing: 0px;
 
         // @media (min-width: 640px) {
         //   font-size: 14px;
@@ -376,6 +388,13 @@
         .finding-item {
           line-height: 1.5;
           margin-bottom: 4px;
+
+          font-family: PingFang SC;
+          font-weight: 400;
+          font-style: Regular;
+          font-size: 14px;
+          line-height: 24px;
+          letter-spacing: 0px;
         }
       }
 
@@ -395,12 +414,14 @@
 
   // 风险标签样式
   .risk-tag {
-    font-size: 18px;
     padding: 2px 8px;
-    border-radius: 16px;
-    font-weight: 600;
-    display: inline-block;
-    line-height: 1.2;
+    border-radius: 4px;
+    border: 1px solid rgba(255, 219, 224, 1);
+
+    font-family: PingFang SC;
+    font-weight: 400;
+    font-style: Regular;
+    font-size: 12px;
 
     &.high-risk {
       color: @high-risk-color;
@@ -475,107 +496,143 @@
       display: flex;
       justify-content: space-between;
       align-items: center;
-      margin-bottom: 16px;
+      margin-bottom: 24px;
+      padding-bottom: 12px;
+      border-bottom: 1px solid #e5e7eb;
 
       .section-title {
         font-size: 18px;
         font-weight: 600;
         margin: 0;
-        background-image: url('./img/underline.svg');
+        color: #1f2937;
       }
 
       .risk-count {
-        font-size: 12px;
+        font-size: 14px;
         color: #6b7280;
-
-        // @media (min-width: 640px) {
-        //   font-size: 14px;
-        // }
       }
     }
 
+    .risk-categories {
+      display: flex;
+      flex-direction: column;
+      gap: 16px;
+    }
+
     .risk-category {
-      margin-bottom: 16px;
+      border-radius: 8px;
+      padding: 0;
 
       .category-header {
         display: flex;
         justify-content: space-between;
         align-items: center;
         cursor: pointer;
-        padding: 8px 0;
+        padding: 10px;
+        // background: linear-gradient(90deg, rgba(255, 82, 87, 0.06) 0%, rgba(255, 82, 87, 0) 100%);
 
-        .category-info {
+        &.high-risk {
+          background: linear-gradient(90deg, rgba(255, 82, 87, 0.06) 0%, rgba(255, 82, 87, 0) 100%);
+        }
+        &.medium-risk {
+          background: linear-gradient(90deg, rgba(255, 158, 11, 0.06) 0%, rgba(255, 158, 11, 0) 100%);
+        }
+        &.low-risk {
+          background: linear-gradient(90deg, rgba(16, 185, 129, 0.06) 0%, rgba(16, 185, 129, 0) 100%);
+        }
+        &.normal {
+          background-color: #6b7280; // 这里需要根据你的 riskConfig 配置来定义
+        }
+
+        .category-left {
           display: flex;
           align-items: center;
-          gap: 8px;
+          gap: 12px;
+
+          .color-indicator {
+            width: 12px;
+            height: 12px;
+            border-radius: 50%;
+
+            /* 这些类名需要根据你的 riskConfig 配置来定义 */
+            &.high-risk {
+              background-color: #ef4444;
+            }
+            &.medium-risk {
+              background-color: #f59e0b;
+            }
+            &.low-risk {
+              background-color: #10b981;
+            }
+            &.normal {
+              background-color: #6b7280;
+            }
+          }
 
           .category-name {
-            font-weight: 500;
-            font-size: 14px;
+            font-weight: 600;
+            font-size: 16px;
+            color: #1f2937;
             margin: 0;
-
-            // @media (min-width: 640px) {
-            //   font-size: 16px;
-            // }
           }
         }
 
-        .category-count {
-          display: flex;
-          align-items: center;
-
-          .count {
-            font-size: 12px;
-            color: #6b7280;
-            margin-right: 8px;
-
-            // @media (min-width: 640px) {
-            //   font-size: 14px;
-            // }
-          }
-
-          .expand-icon {
-            transition: transform 0.3s ease;
+        .category-right {
+          .category-count {
             font-size: 14px;
-
-            &.rotated {
-              transform: rotate(180deg);
-            }
+            color: #6b7280;
+            font-weight: 500;
           }
         }
       }
 
       .risk-items {
-        margin-top: 12px;
-        padding-left: 16px;
-        border-left-width: 2px;
+        margin-top: 16px;
         display: flex;
         flex-direction: column;
         gap: 12px;
 
-        // @media (min-width: 640px) {
-        //   padding-left: 20px;
-        // }
-
         .risk-item {
+          background: rgba(243, 247, 252, 1);
+          border-radius: 4px;
           padding: 12px;
-          border-radius: 8px;
 
-          .item-title {
-            font-weight: 500;
-            font-size: 14px;
-            margin: 0 0 4px 0;
-          }
+          font-family: PingFang SC;
+          font-weight: 500;
+          font-style: Medium;
+          font-size: 12px;
+          line-height: 20px;
+          letter-spacing: 0px;
+          color: rgba(33, 33, 33, 1);
 
-          .item-description {
-            font-size: 12px;
-            color: #6b7280;
-            margin: 0;
-            line-height: 1.4;
+          .risk-item-content {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
 
-            // @media (min-width: 640px) {
-            //   font-size: 14px;
-            // }
+            .item-title {
+              font-size: 14px;
+              color: #374151;
+              margin: 0;
+              font-weight: 500;
+            }
+
+            .item-trend {
+              font-size: 12px;
+              padding: 2px 8px;
+              border-radius: 12px;
+              font-weight: 500;
+
+              &.trend-up {
+                background-color: #fef2f2;
+                color: #dc2626;
+              }
+
+              &.trend-down {
+                background-color: #f0fdf4;
+                color: #16a34a;
+              }
+            }
           }
         }
       }
@@ -615,6 +672,7 @@
         align-items: center;
         cursor: pointer;
         padding: 8px 0;
+        border-bottom: 1px solid #e5e7eb;
 
         .category-name {
           font-weight: 500;
@@ -634,7 +692,9 @@
             font-size: 12px;
             color: #6b7280;
             margin-right: 8px;
-
+            background: rgba(239, 242, 245, 1);
+            padding: 4px 6px 4px 6px;
+            border-radius: 2px;
             // @media (min-width: 640px) {
             //   font-size: 14px;
             // }
@@ -664,7 +724,7 @@
         .indicator {
           .indicator-header {
             display: flex;
-            flex-direction: column;
+            justify-content: space-between;
             margin-bottom: 8px;
             gap: 8px;
 

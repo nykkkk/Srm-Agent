@@ -3,7 +3,7 @@ import { Outlet, request } from 'umi'
 import { useStore } from '@/store'
 import Loading from '@/components/Loading'
 import changeTheme from '@/utils/changeTheme'
-import { getMockData, getRecentAnalysis, getWsUrl, getToken, getTestData } from '@/services'
+import { getToken, getTestData } from '@/services'
 import { ChatProProvider } from '@kdcloudjs/kdesign-chatui'
 export default function Index() {
   const globalLoading = useStore((s) => s.globalLoading)

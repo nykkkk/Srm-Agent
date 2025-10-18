@@ -1,7 +1,10 @@
 import { riskConfig } from '@/components'
 import { Line } from 'react-chartjs-2'
+import { Charts } from '../Charts'
 
 export const RiskDetails = ({ data, expandedSections, onToggleSection, productRateChartData, chartOptions }) => {
+  console.log('进入RiskDetails组件', data)
+
   return (
     <section className="report-card risk-details">
       <div className="details-header">
@@ -14,10 +17,7 @@ export const RiskDetails = ({ data, expandedSections, onToggleSection, productRa
           <div className="category-header" onClick={() => onToggleSection(`${category.id}-content`)}>
             <h4 className="category-name">{category.name}</h4>
             <div className="abnormal-count">
-              <span className="count">{category.abnormalCount}项异常</span>
-              <i
-                className={`fa fa-angle-down expand-icon ${expandedSections[`${category.id}-content`] ? 'rotated' : ''}`}
-              ></i>
+              <div className="count">{category.abnormalCount}项异常</div>
             </div>
           </div>
 
@@ -32,8 +32,22 @@ export const RiskDetails = ({ data, expandedSections, onToggleSection, productRa
 
                   <div className="result-card">
                     <p className="result-text" dangerouslySetInnerHTML={{ __html: indicator.result }}></p>
-                    <p className="score-range">{indicator.scoreRange}</p>
                   </div>
+
+                  {indicator.showChart && (
+                    <div className="chart-section">
+                      <p className="chart-title">
+                        <i className="chart-icon fa fa-bar-chart"></i>
+                        {indicator.chartTitle}
+                      </p>
+                      <p className="score-range">{indicator.dataRange}</p>
+                      <div className="chart-container">
+                        <Charts data={indicator.echarts}></Charts>
+                      </div>
+                    </div>
+                  )}
+
+                  {/*  表格数据未处理 */}
 
                   {indicator.aiSuggestion && (
                     <div className="ai-suggestion">
@@ -42,18 +56,6 @@ export const RiskDetails = ({ data, expandedSections, onToggleSection, productRa
                         <span className="suggestion-title">AI建议</span>
                       </div>
                       <p className="suggestion-text">{indicator.aiSuggestion}</p>
-                    </div>
-                  )}
-
-                  {indicator.showChart && (
-                    <div className="chart-section">
-                      <p className="chart-title">
-                        <i className="chart-icon fa fa-bar-chart"></i>
-                        {indicator.chartTitle}
-                      </p>
-                      <div className="chart-container">
-                        <Line data={productRateChartData} options={chartOptions} />
-                      </div>
                     </div>
                   )}
                 </div>

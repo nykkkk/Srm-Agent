@@ -1,4 +1,5 @@
 import { riskConfig } from '@/components'
+
 export const RiskOverview = ({ data, expandedSections, onToggleSection }) => {
   return (
     <div className="report-card risk-overview">
@@ -7,31 +8,34 @@ export const RiskOverview = ({ data, expandedSections, onToggleSection }) => {
         <span className="risk-count">共发现{data.totalRisks}项风险</span>
       </div>
 
-      <div className="risk-categories-grid">
+      <div className="risk-categories">
         {data.riskCategories.map((category) => (
-          <div key={category.id} className="risk-category-card">
-            <div className="category-main" onClick={() => onToggleSection(`${category.id}-content`)}>
+          <div key={category.id} className="risk-category">
+            <div
+              className={`category-header  ${riskConfig[category.type]?.bgClass || ''}`}
+              onClick={() => onToggleSection(`${category.id}-content`)}
+            >
               <div className="category-left">
-                <div className={riskConfig[category.type].colorClass}></div>
+                <div className={`color-indicator ${riskConfig[category.type]?.colorClass || ''}`}></div>
                 <span className="category-name">{category.name}</span>
               </div>
               <div className="category-right">
-                <span className="count">{category.count}项</span>
-                <i
-                  className={`fa fa-angle-down expand-icon ${expandedSections[`${category.id}-content`] ? 'rotated' : ''}`}
-                ></i>
+                <span className="category-count">{category.count}项</span>
               </div>
             </div>
 
             {expandedSections[`${category.id}-content`] && (
-              <div className="risk-items-container">
+              <div className="risk-items">
                 {category.items.map((item, itemIndex) => (
-                  <div key={itemIndex} className="risk-item-card">
-                    <div className="risk-item-header">
+                  <div key={itemIndex} className="risk-item">
+                    <div className="risk-item-content">
                       <p className="item-title">{item.title}</p>
-                      <span className="item-trend">{item.trend}</span>
+                      {item.trend && (
+                        <span className={`item-trend ${item.trend.includes('上升') ? 'trend-up' : 'trend-down'}`}>
+                          {item.trend}
+                        </span>
+                      )}
                     </div>
-                    <p className="item-description">{item.description}</p>
                   </div>
                 ))}
               </div>

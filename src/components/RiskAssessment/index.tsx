@@ -1,8 +1,11 @@
 import { riskConfig } from '@/components'
 import { Radar } from 'react-chartjs-2'
+import { Charts } from '../Charts'
 import Thinking from '../../customCard/ThinkCard/img/Thinking.svg'
 
-export const RiskAssessment = (reportData) => {
+export const RiskAssessment = ({ reportData }) => {
+  console.log('进入RiskAssessment组件', reportData)
+
   return (
     <div className="report-card risk-assessment">
       <div className="risk-assessment-header">
@@ -17,7 +20,7 @@ export const RiskAssessment = (reportData) => {
       <div>
         <div className="chart-container">
           <div className="radar-chart">
-            <Radar data={reportData.radarChartData} options={reportData.radarChartOptions} />
+            <Charts data={reportData.riskAssessment.echarts}></Charts>
           </div>
         </div>
 

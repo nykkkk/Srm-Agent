@@ -1943,6 +1943,8 @@ export const reportData = {
     legalRepresentative: '王大锤',
     registeredCapital: '13637.9万',
     establishmentDate: '1995-01-23',
+    companyProfile:
+      '深圳市德胜电子科技有限公司成立于1995年，是一家专业从事电子元器件研发、生产、销售的高新技术企业。公司拥有一支经验丰富的研发团队，致力于为客户提供高品质的电子元器件产品和服务。',
   },
   riskAssessment: {
     aiInterpretation:
@@ -1952,6 +1954,56 @@ export const reportData = {
       '履约风险：近3个月交货准时率72%，低于合同约定的90%。',
       '财务风险：XXXXXXXXXXXXXXXXXX',
     ],
+    echarts: {
+      type: 'radar',
+      ChartData: {
+        data: {
+          labels: ['产品质量', '经营风险', '财务风险', '供应链', '舆情风险', '法律诉讼'],
+          datasets: [
+            {
+              label: '风险值',
+              data: [65, 55, 80, 85, 60, 70],
+              backgroundColor: 'rgba(255, 125, 0, 0.2)',
+              borderColor: 'rgba(255, 125, 0, 1)',
+              pointBackgroundColor: 'rgba(255, 125, 0, 1)',
+              pointBorderColor: '#fff',
+              pointHoverBackgroundColor: '#fff',
+              pointHoverBorderColor: 'rgba(255, 125, 0, 1)',
+              borderWidth: 2,
+            },
+          ],
+        },
+        //   这是雷达图的样式
+        options: {
+          scales: {
+            r: {
+              angleLines: {
+                display: true,
+                color: 'rgba(0, 0, 0, 0.1)',
+              },
+              suggestedMin: 0,
+              suggestedMax: 100,
+              ticks: {
+                display: false,
+              },
+              grid: {
+                color: 'rgba(0, 0, 0, 0.1)',
+              },
+            },
+          },
+          plugins: {
+            legend: {
+              display: false,
+            },
+          },
+          elements: {
+            line: {
+              borderWidth: 2,
+            },
+          },
+        },
+      },
+    },
   },
   riskOverview: {
     totalRisks: 20,
@@ -1965,15 +2017,12 @@ export const reportData = {
         items: [
           {
             title: '产品合格率',
-            description: '最近一批次产品合格率为87%',
           },
           {
             title: '准时交货率',
-            description: '近三个月平均延迟率12.5%，较上季度上升8个百分点',
           },
           {
             title: '订单交货周期',
-            description: '近三个月平均延迟率12.5%，较上季度上升8个百分点',
           },
         ],
       },
@@ -1986,11 +2035,9 @@ export const reportData = {
         items: [
           {
             title: '财务状况',
-            description: '近期现金流紧张',
           },
           {
             title: '供应链稳定性',
-            description: '主要原材料供应商单一',
           },
         ],
       },
@@ -2011,18 +2058,161 @@ export const reportData = {
             riskLevel: 'high',
             riskLevelText: '高风险',
             result: '检查结果: 最近一批次产品合格率为87%',
-            scoreRange: '分值范围: 0.8~0.95',
+            dataRange: '数据统计范围',
             aiSuggestion: '启动质量审核程序，要求供应商提交整改报告，并进行现场评估。',
             chartTitle: '产品合格率分析',
             showChart: true,
+            echarts: {
+              type: 'line',
+              ChartData: {
+                data: {
+                  labels: ['1月', '2月', '3月', '4月', '5月', '6月'],
+                  // datasets还需要附带样式
+                  datasets: [
+                    {
+                      label: '合格率',
+                      data: [95, 92, 89, 87, 90, 88],
+                      borderColor: 'rgba(22, 93, 255, 1)',
+                      backgroundColor: 'rgba(22, 93, 255, 0.1)',
+                      borderWidth: 2,
+                      tension: 0.4,
+                      fill: true,
+                    },
+                  ],
+                },
+                // 这是折线图的样式
+                options: {
+                  responsive: true,
+                  maintainAspectRatio: false,
+                  scales: {
+                    y: {
+                      beginAtZero: false,
+                      min: 80,
+                      max: 100,
+                      grid: {
+                        color: 'rgba(0, 0, 0, 0.05)',
+                      },
+                      ticks: {
+                        callback: function (value) {
+                          return value + '%'
+                        },
+                      },
+                    },
+                    x: {
+                      grid: {
+                        display: false,
+                      },
+                    },
+                  },
+                  plugins: {
+                    legend: {
+                      display: false,
+                    },
+                    tooltip: {
+                      callbacks: {
+                        label: function (context) {
+                          return '合格率: ' + context.parsed.y + '%'
+                        },
+                      },
+                    },
+                  },
+                },
+              },
+            },
+
+            showTable: true,
+            TableData: {
+              headers: ['月份', '合格率'],
+              rows: [
+                ['1月', '95%'],
+                ['2月', '92%'],
+                ['3月', '89%'],
+                ['4月', '87%'],
+                ['5月', '90%'],
+                ['6月', '88%'],
+              ],
+            },
           },
           {
-            id: 'order-response',
-            name: '订单响应周期',
-            riskLevel: 'normal',
-            riskLevelText: '正常',
-            result: '检查结果: 从确认订单到发货的平均时间为0.5天，响应快',
-            scoreRange: '分值范围: 0~3天',
+            id: 'product-rate123',
+            name: '产品合格率',
+            riskLevel: 'high',
+            riskLevelText: '高风险',
+            result: '检查结果: 最近一批次产品合格率为87%',
+            dataRange: '数据统计范围',
+            aiSuggestion: '启动质量审核程序，要求供应商提交整改报告，并进行现场评估。',
+            chartTitle: '产品合格率分析',
+            showChart: true,
+            echarts: {
+              type: 'line',
+              ChartData: {
+                data: {
+                  labels: ['1月', '2月', '3月', '4月', '5月', '6月'],
+                  // datasets还需要附带样式
+                  datasets: [
+                    {
+                      label: '合格率',
+                      data: [95, 92, 89, 87, 90, 88],
+                      borderColor: 'rgba(22, 93, 255, 1)',
+                      backgroundColor: 'rgba(22, 93, 255, 0.1)',
+                      borderWidth: 2,
+                      tension: 0.4,
+                      fill: true,
+                    },
+                  ],
+                },
+                // 这是折线图的样式
+                options: {
+                  responsive: true,
+                  maintainAspectRatio: false,
+                  scales: {
+                    y: {
+                      beginAtZero: false,
+                      min: 80,
+                      max: 100,
+                      grid: {
+                        color: 'rgba(0, 0, 0, 0.05)',
+                      },
+                      ticks: {
+                        callback: function (value) {
+                          return value + '%'
+                        },
+                      },
+                    },
+                    x: {
+                      grid: {
+                        display: false,
+                      },
+                    },
+                  },
+                  plugins: {
+                    legend: {
+                      display: false,
+                    },
+                    tooltip: {
+                      callbacks: {
+                        label: function (context) {
+                          return '合格率: ' + context.parsed.y + '%'
+                        },
+                      },
+                    },
+                  },
+                },
+              },
+            },
+
+            showTable: true,
+            TableData: {
+              headers: ['月份', '合格率'],
+              rows: [
+                ['1月', '95%'],
+                ['2月', '92%'],
+                ['3月', '89%'],
+                ['4月', '87%'],
+                ['5月', '90%'],
+                ['6月', '88%'],
+              ],
+            },
           },
         ],
       },
@@ -2046,99 +2236,5 @@ export const reportData = {
         description: '建立舆情监测体系，及时发现并应对负面信息。',
       },
     ],
-  },
-  radarChartData: {
-    labels: ['产品质量', '经营风险', '财务风险', '供应链', '舆情风险', '法律诉讼'],
-    datasets: [
-      {
-        label: '风险值',
-        data: [65, 55, 80, 85, 60, 70],
-        backgroundColor: 'rgba(255, 125, 0, 0.2)',
-        borderColor: 'rgba(255, 125, 0, 1)',
-        pointBackgroundColor: 'rgba(255, 125, 0, 1)',
-        pointBorderColor: '#fff',
-        pointHoverBackgroundColor: '#fff',
-        pointHoverBorderColor: 'rgba(255, 125, 0, 1)',
-        borderWidth: 2,
-      },
-    ],
-  },
-  productRateChartData: {
-    labels: ['1月', '2月', '3月', '4月', '5月', '6月'],
-    datasets: [
-      {
-        label: '合格率',
-        data: [95, 92, 89, 87, 90, 88],
-        borderColor: 'rgba(22, 93, 255, 1)',
-        backgroundColor: 'rgba(22, 93, 255, 0.1)',
-        borderWidth: 2,
-        tension: 0.4,
-        fill: true,
-      },
-    ],
-  },
-  chartOptions: {
-    responsive: true,
-    maintainAspectRatio: false,
-    scales: {
-      y: {
-        beginAtZero: false,
-        min: 80,
-        max: 100,
-        grid: {
-          color: 'rgba(0, 0, 0, 0.05)',
-        },
-        ticks: {
-          callback: function (value) {
-            return value + '%'
-          },
-        },
-      },
-      x: {
-        grid: {
-          display: false,
-        },
-      },
-    },
-    plugins: {
-      legend: {
-        display: false,
-      },
-      tooltip: {
-        callbacks: {
-          label: function (context) {
-            return '合格率: ' + context.parsed.y + '%'
-          },
-        },
-      },
-    },
-  },
-  radarChartOptions: {
-    scales: {
-      r: {
-        angleLines: {
-          display: true,
-          color: 'rgba(0, 0, 0, 0.1)',
-        },
-        suggestedMin: 0,
-        suggestedMax: 100,
-        ticks: {
-          display: false,
-        },
-        grid: {
-          color: 'rgba(0, 0, 0, 0.1)',
-        },
-      },
-    },
-    plugins: {
-      legend: {
-        display: false,
-      },
-    },
-    elements: {
-      line: {
-        borderWidth: 2,
-      },
-    },
   },
 }
