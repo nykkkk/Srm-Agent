@@ -17,6 +17,9 @@ export interface BaseState {
   wsUrl: string
   setWsUrl: (v: string) => void
 
+  token: string
+  setToken: (v: string) => void
+
   historyOpen: boolean
   setHistoryOpen: (v: boolean) => void
   historyList: HistoryItem[]
@@ -57,6 +60,13 @@ export const createBaseSlice: StateCreator<StoreState, [['zustand/immer', never]
   setWsUrl: (v) => {
     set((s) => {
       s.wsUrl = v
+    })
+  },
+
+  token: '',
+  setToken: (v) => {
+    set((s) => {
+      s.token = v
     })
   },
 

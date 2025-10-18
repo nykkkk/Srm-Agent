@@ -10,6 +10,7 @@ import { C_FILE } from '@/constant'
 import SearchInputWithDropdown from '@/components/Search'
 import { getRiskLevelText, getRiskLevelColor } from '@/constant'
 import AnalysisLogo from '@/assets/analysisLogo.png'
+import { getHttpHeader } from '@/utils'
 
 const Home: FC = () => {
   const textareaRef = useRef<any>(null)
@@ -54,12 +55,6 @@ const Home: FC = () => {
       return
     }
 
-    // // 添加到搜索历史
-    // if (message && !searchHistory.includes(message)) {
-    //   const newHistory = [message, ...searchHistory.slice(0, 4)]
-    //   setSearchHistory(newHistory)
-    // }
-
     const temp: BaseMessage = [{ type: 'user', msg: [] }]
     if (message) {
       temp[0].msg.push({ type: 'markdown', content: message })
@@ -91,8 +86,16 @@ const Home: FC = () => {
     const fetchData = async () => {
       setLoading(true)
       try {
-        const res = await getRecentAnalysis()
-        console.log('获取最近分析数据成功:', res)
+        const RecentAnalysis = {
+          page: 1,
+          pageSize: 5,
+          keyword: '',
+        }
+
+        const res = await getRecentAnalysis(getHttpHeader(), RecentAnalysis)
+        if (!res.status) {
+          console.log('获取最近分析数据失败:', res)
+        }
         if (res && Array.isArray(res)) {
           setRecentAnalysis(res)
         } else {

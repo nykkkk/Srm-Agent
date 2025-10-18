@@ -1,6 +1,7 @@
 import zhCN from 'kdesign-mobile/es/locale/zh-CN'
 import copy from 'copy-to-clipboard'
 import { Toast } from 'kdesign-mobile'
+import { useStore } from '@/store'
 
 const TEXT = 'text'
 const IMG = 'img'
@@ -9,6 +10,13 @@ const REFERENCE = 'reference'
 const MARKDOWN = 'markdown'
 const THINKING = 'thinking'
 const IFRAME = 'iframe'
+
+export function getHttpHeader() {
+  return {
+    'Content-Type': 'application/json',
+    access_token: useStore.getState().token,
+  }
+}
 
 export const sleep = (ms: number) => new Promise((resolve) => setTimeout(resolve, ms))
 
