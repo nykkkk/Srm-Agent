@@ -33,7 +33,7 @@ export default defineConfig({
   proxy: {
     '/kapi': {
       target: 'https://feature.kingdee.com:1026/feature_sit_scm/kapi/',
-      // target: 'http://172.20.113.95:8080/kapi/',
+      // target: 'http://172.20.113.95:8080/ierp/kapi/',
       changeOrigin: true,
       pathRewrite: { '^/kapi': '' },
     },

@@ -6,6 +6,14 @@ export const getMockData = () => {
   return request('http://localhost:8000/mock/data')
 }
 
+export const getWsUrl = () => {
+  return request('/mock/initWebsocketUrl')
+}
+
+export const getHistory = () => {
+  return request('/mock/history')
+}
+
 export const getRecentAnalysis = (headers, data) => {
   return request(front + '/kapi/v2/pbd/riskagent/history_analyzes', { method: 'post', headers: headers, data: data })
 }
@@ -18,13 +26,6 @@ export const getSuppliers = (headers, data) => {
   })
 }
 
-export const getWsUrl = () => {
-  return request('/mock/initWebsocketUrl')
-}
-
-export const getHistory = () => {
-  return request('/mock/history')
-}
 export const getToken = () => {
   function getCurrentTimeAndRandomString() {
     // 获取当前时间
@@ -71,4 +72,8 @@ export const getToken = () => {
 
 export const getInitStore = (data) => {
   return request(front + '/kapi/v2/pbd/riskagent/init_store', { method: 'post', headers: data })
+}
+
+export const startAnalysis = (data) => {
+  return request(front + '/kapi/v2/pbd/riskagent/analyze', { method: 'post', headers: data })
 }

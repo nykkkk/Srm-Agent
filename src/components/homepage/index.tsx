@@ -11,6 +11,7 @@ import SearchInputWithDropdown from '@/components/Search'
 import { getRiskLevelText, getRiskLevelColor } from '@/constant'
 import AnalysisLogo from '@/assets/analysisLogo.png'
 import { getHttpHeader } from '@/utils'
+import { startAnalysis } from '@/services'
 
 const Home: FC = () => {
   const textareaRef = useRef<any>(null)
@@ -44,7 +45,7 @@ const Home: FC = () => {
   // 判断是否允许分析：只有当输入框的数据是从suggestion选择或历史搜索中点击的才可以点击
   const canAnalyze = isFromHistory || isFromSuggestion
 
-  const onSend = (v = undefined) => {
+  const onSend = async (v = undefined) => {
     if (disabled || !canAnalyze) return null
 
     const message = v ?? (inputValue || '')
@@ -66,6 +67,20 @@ const Home: FC = () => {
         content.push({ id: f.uid, name: f.name, type: f.type, url: f?.response.url, size: f.size })
       })
       temp[0].msg.push({ type: C_FILE, content })
+    }
+
+    try {
+      const getAnalysis = async () => {
+        const analysis = await startAnalysis(getHttpHeader())
+        if (analysis.status) {
+          console.log('获取think数据')
+        } else {
+          console.log('开始分析失败')
+        }
+      }
+      getAnalysis()
+    } catch (error) {
+      console.log('连接websocket报错')
     }
 
     // 导航到chat页面
