@@ -2216,6 +2216,176 @@ export const reportData = {
           },
         ],
       },
+      {
+        id: 'product-quality1',
+        name: '产品质量',
+        abnormalCount: 1,
+        defaultExpanded: true,
+        indicators: [
+          {
+            id: 'product-rate1',
+            name: '产品合格率',
+            riskLevel: 'high',
+            riskLevelText: '高风险',
+            result: '检查结果: 最近一批次产品合格率为87%',
+            dataRange: '数据统计范围',
+            aiSuggestion: '启动质量审核程序，要求供应商提交整改报告，并进行现场评估。',
+            chartTitle: '产品合格率分析',
+            showChart: true,
+            echarts: {
+              type: 'line',
+              ChartData: {
+                data: {
+                  labels: ['1月', '2月', '3月', '4月', '5月', '6月'],
+                  // datasets还需要附带样式
+                  datasets: [
+                    {
+                      label: '合格率',
+                      data: [95, 92, 89, 87, 90, 88],
+                      borderColor: 'rgba(22, 93, 255, 1)',
+                      backgroundColor: 'rgba(22, 93, 255, 0.1)',
+                      borderWidth: 2,
+                      tension: 0.4,
+                      fill: true,
+                    },
+                  ],
+                },
+                // 这是折线图的样式
+                options: {
+                  responsive: true,
+                  maintainAspectRatio: false,
+                  scales: {
+                    y: {
+                      beginAtZero: false,
+                      min: 80,
+                      max: 100,
+                      grid: {
+                        color: 'rgba(0, 0, 0, 0.05)',
+                      },
+                      ticks: {
+                        callback: function (value) {
+                          return value + '%'
+                        },
+                      },
+                    },
+                    x: {
+                      grid: {
+                        display: false,
+                      },
+                    },
+                  },
+                  plugins: {
+                    legend: {
+                      display: false,
+                    },
+                    tooltip: {
+                      callbacks: {
+                        label: function (context) {
+                          return '合格率: ' + context.parsed.y + '%'
+                        },
+                      },
+                    },
+                  },
+                },
+              },
+            },
+
+            showTable: true,
+            TableData: {
+              headers: ['月份', '合格率'],
+              rows: [
+                ['1月', '95%'],
+                ['2月', '92%'],
+                ['3月', '89%'],
+                ['4月', '87%'],
+                ['5月', '90%'],
+                ['6月', '88%'],
+              ],
+            },
+          },
+          {
+            id: 'product-rate2',
+            name: '产品合格率',
+            riskLevel: 'high',
+            riskLevelText: '高风险',
+            result: '检查结果: 最近一批次产品合格率为87%',
+            dataRange: '数据统计范围',
+            aiSuggestion: '启动质量审核程序，要求供应商提交整改报告，并进行现场评估。',
+            chartTitle: '产品合格率分析',
+            showChart: true,
+            echarts: {
+              type: 'line',
+              ChartData: {
+                data: {
+                  labels: ['1月', '2月', '3月', '4月', '5月', '6月'],
+                  // datasets还需要附带样式
+                  datasets: [
+                    {
+                      label: '合格率',
+                      data: [95, 92, 89, 87, 90, 88],
+                      borderColor: 'rgba(22, 93, 255, 1)',
+                      backgroundColor: 'rgba(22, 93, 255, 0.1)',
+                      borderWidth: 2,
+                      tension: 0.4,
+                      fill: true,
+                    },
+                  ],
+                },
+                // 这是折线图的样式
+                options: {
+                  responsive: true,
+                  maintainAspectRatio: false,
+                  scales: {
+                    y: {
+                      beginAtZero: false,
+                      min: 80,
+                      max: 100,
+                      grid: {
+                        color: 'rgba(0, 0, 0, 0.05)',
+                      },
+                      ticks: {
+                        callback: function (value) {
+                          return value + '%'
+                        },
+                      },
+                    },
+                    x: {
+                      grid: {
+                        display: false,
+                      },
+                    },
+                  },
+                  plugins: {
+                    legend: {
+                      display: false,
+                    },
+                    tooltip: {
+                      callbacks: {
+                        label: function (context) {
+                          return '合格率: ' + context.parsed.y + '%'
+                        },
+                      },
+                    },
+                  },
+                },
+              },
+            },
+
+            showTable: true,
+            TableData: {
+              headers: ['月份', '合格率'],
+              rows: [
+                ['1月', '95%'],
+                ['2月', '92%'],
+                ['3月', '89%'],
+                ['4月', '87%'],
+                ['5月', '90%'],
+                ['6月', '88%'],
+              ],
+            },
+          },
+        ],
+      },
     ],
   },
   improvementSuggestions: {

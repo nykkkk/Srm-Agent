@@ -664,7 +664,14 @@
     }
 
     .detail-category {
-      margin-bottom: 24px;
+      // margin-bottom: 24px;
+
+      &:not(:last-child) {
+        border-bottom: 1px solid #e5e7eb;
+      }
+      &.expanded {
+        border-bottom: none;
+      }
 
       .category-header {
         display: flex;
@@ -672,12 +679,17 @@
         align-items: center;
         cursor: pointer;
         padding: 8px 0;
-        border-bottom: 1px solid #e5e7eb;
+        &.expanded {
+          border-bottom: 1px dashed #e5e7eb;
+        }
 
         .category-name {
+          font-family: PingFang SC;
           font-weight: 500;
+          font-style: Medium;
           font-size: 14px;
-          margin: 0;
+          line-height: 22px;
+          letter-spacing: 0px;
 
           //   @media (min-width: 640px) {
           //     font-size: 16px;
@@ -701,8 +713,10 @@
           }
 
           .expand-icon {
-            transition: transform 0.3s ease;
-            font-size: 14px;
+            color: #6b7280; // 箭头颜色
+            font-size: 12px; // 箭头大小
+            transition: transform 0.3s ease; // 添加过渡效果
+            margin-left: 4px; // 与计数文字的间距
 
             &.rotated {
               transform: rotate(180deg);
@@ -716,7 +730,6 @@
         display: flex;
         flex-direction: column;
         gap: 16px;
-
         // @media (min-width: 640px) {
         //   gap: 24px;
         // }
@@ -735,9 +748,12 @@
             // }
 
             .indicator-name {
+              font-family: PingFang SC;
               font-weight: 500;
+              font-style: Medium;
               font-size: 14px;
-              margin: 0;
+              line-height: 22px;
+              letter-spacing: 0px;
 
               //   @media (min-width: 640px) {
               //     font-size: 16px;
