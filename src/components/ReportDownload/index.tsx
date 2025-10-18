@@ -1,4 +1,5 @@
-export const ReportDownload = () => {
+import wrapperIcon from './img/wrapper.svg'
+export const ReportDownload = ({ data }) => {
   return (
     <div className="report-card report-download">
       <p className="download-description">已经为您生成一份供应商详细报告</p>
@@ -7,10 +8,13 @@ export const ReportDownload = () => {
         <div className="file-info">
           <div className="file-icon">
             <i className="icon fa fa-file-text-o"></i>
+            <img src={wrapperIcon} alt="" />
           </div>
           <div className="file-details">
-            <p className="file-name">深圳德胜电子科技有限公司供应商风险报告</p>
-            <p className="file-meta">ASH AI 生成，仅供参考，请仔细甄别 隐私</p>
+            <p className="file-name">{data.filename}</p>
+            <p className="file-meta">
+              {data.filetype} · {data.filesize}
+            </p>
           </div>
         </div>
         <button className="download-button">

@@ -5,6 +5,8 @@ export default defineConfig({
   plugins: ['@umijs/plugins/dist/request'],
   request: {},
   mock: {},
+  devtool: process.env.NODE_ENV === 'development' ? 'eval-cheap-module-source-map' : false,
+
   routes: [
     {
       path: '/',
@@ -29,15 +31,17 @@ export default defineConfig({
   hash: true,
   npmClient: 'yarn',
   proxy: {
-    '/api': {
-      target: 'https://feature.kingdee.com:1026',
+    '/kapi': {
+      target: 'https://feature.kingdee.com:1026/feature_sit_scm/kapi/',
+      // target: 'http://172.20.113.95:8080/kapi/',
       changeOrigin: true,
-      pathRewrite: { '^/api': '' },
-    },
-    '/v2': {
-      target: 'https://feature.kingdee.com:1026/feature_sit_scm/kapi/v2',
-      changeOrigin: true,
-      pathRewrite: { '^/v2': '' },
+      pathRewrite: { '^/kapi': '' },
     },
   },
+  jsMinifier: 'esbuild',
+  jsMinifierOptions: {
+    minify: true,
+  },
+  esbuildMinifyIIFE: true,
+  publicPath: process.env.NODE_ENV === 'production' ? './' : '/',
 })

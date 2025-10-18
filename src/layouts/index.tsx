@@ -14,11 +14,21 @@ export default function Layout() {
 
   useEffect(() => {
     const init = async () => {
+      // useStore.getState().setToken('')
+      // const InitStoreData = await getInitStore(getHttpHeader())
+      // setWsUrl(InitStoreData.data.wsUrl)
+      // if (useStore.getState().wsUrl) {
+      //   setIsInitialized(true)
+      // }
+      // console.log('✅设置WebSocket成功:', useStore.getState().wsUrl)
+      // // }
+      // changeTheme({ color: '#276ff5' })
+
       const token = await getToken()
       console.log('✅getToken成功:', token)
       if (token.status === true) {
         useStore.getState().setToken(token.data.access_token)
-
+        // useStore.getState().setToken('')
         const InitStoreData = await getInitStore(getHttpHeader())
 
         setWsUrl(InitStoreData.data.wsUrl)

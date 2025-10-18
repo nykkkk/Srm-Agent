@@ -81,7 +81,14 @@ const Home: FC = () => {
     }, 20)
   }
 
-  // 使用useEffect在组件加载时获取数据
+  useEffect(() => {
+    console.log('home组件挂载')
+
+    return () => {
+      console.log('home组件卸载')
+    }
+  }, []) // 使用useEffect在组件加载时获取数据
+
   useEffect(() => {
     const fetchData = async () => {
       setLoading(true)

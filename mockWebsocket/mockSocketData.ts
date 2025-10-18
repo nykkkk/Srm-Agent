@@ -2407,4 +2407,11 @@ export const reportData = {
       },
     ],
   },
+  reportData: {
+    filename: '深圳德胜电子科技有限公司供应商风险报告',
+    filetype: 'PDF',
+    filesize: '4MB',
+    filecontent: '',
+    // 这个需要吗？
+  },
 }

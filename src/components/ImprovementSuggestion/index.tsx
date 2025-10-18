@@ -9,11 +9,11 @@ export const ImprovementSuggestions = ({ data }) => {
       <div className="suggestions-list">
         {data.suggestions.map((suggestion, index) => (
           <div key={index} className="suggestion-item">
-            <p className="suggestion-title">
-              <i className={`title-icon fa fa-${suggestion.icon}`}></i>
+            <div className="suggestion-title">
+              <div className={`title-icon`}></div>
               {suggestion.title}
-            </p>
-            <p className="suggestion-description">{suggestion.description}</p>
+            </div>
+            <div className="suggestion-description">{suggestion.description}</div>
           </div>
         ))}
       </div>

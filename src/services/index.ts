@@ -1,15 +1,21 @@
 import { request } from 'umi'
 
+const isKingdee = window.location.href.includes('/kingdee')
+const front = isKingdee ? window.location.href.split('/kingdee')[0] : ''
 export const getMockData = () => {
   return request('http://localhost:8000/mock/data')
 }
 
 export const getRecentAnalysis = (headers, data) => {
-  return request('/v2/pbd/riskagent/history_analyzes', { method: 'post', headers: headers, data: data })
+  return request(front + '/kapi/v2/pbd/riskagent/history_analyzes', { method: 'post', headers: headers, data: data })
 }
 
-export const getSuppliers = (inputValue: string) => {
-  return request(`http://localhost:8000/api/suppliers/search?q=${encodeURIComponent(inputValue)}`)
+export const getSuppliers = (headers, data) => {
+  return request(front + `/kapi/v2/pbd/riskagent/supplier_search`, {
+    method: 'post',
+    headers: headers,
+    data: data,
+  })
 }
 
 export const getWsUrl = () => {
@@ -19,7 +25,6 @@ export const getWsUrl = () => {
 export const getHistory = () => {
   return request('/mock/history')
 }
-
 export const getToken = () => {
   function getCurrentTimeAndRandomString() {
     // 获取当前时间
@@ -42,19 +47,28 @@ export const getToken = () => {
 
   // 使用示例
   const result = getCurrentTimeAndRandomString()
+  // const data = {
+  //   client_id: 'nyk_test',
+  //   client_secret: 'Xy8@zB#5dF*gH2jK$mN7qR9tS!vW3yZ',
+  //   username: 'IERP',
+  //   accountId: '1356502410930947072',
+  //   nonce: result.randomString, // 替换为随机字符串
+  //   timestamp: result.timestamp, // 替换为当前时间
+  //   language: 'zh_CN',
+  // }
   const data = {
-    client_id: 'nyk_test',
-    client_secret: 'Xy8@zB#5dF*gH2jK$mN7qR9tS!vW3yZ',
+    client_id: 'RiskAgent',
+    client_secret: 'figd_5ejJs3OM!sO4JERt6VM#AnyJDhYcAGZNuAQjs4rqm5',
     username: 'IERP',
     accountId: '1356502410930947072',
-    nonce: result.randomString, // 替换为随机字符串
-    timestamp: result.timestamp, // 替换为当前时间
+    nonce: result.randomString,
+    timestamp: result.timestamp,
     language: 'zh_CN',
   }
 
-  return request('/api/feature_sit_scm/kapi/oauth2/getToken', { method: 'post', data })
+  return request(front + '/kapi/oauth2/getToken', { method: 'post', data })
 }
 
 export const getInitStore = (data) => {
-  return request('/v2/pbd/riskagent/init_store', { method: 'post', headers: data })
+  return request(front + '/kapi/v2/pbd/riskagent/init_store', { method: 'post', headers: data })
 }
